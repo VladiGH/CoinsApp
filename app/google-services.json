@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "495145137342",
+    "firebase_url": "https://conixap.firebaseio.com",
+    "project_id": "conixap",
+    "storage_bucket": "conixap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495145137342:android:f50aee1d92debd47",
+        "android_client_info": {
+          "package_name": "com.naldana.ejemplo10"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495145137342-cb450ka52muttcuh1ns67uak10mvc9md.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naldana.ejemplo10",
+            "certificate_hash": "39af5e0b74ce0c99ed6367090572ddcc49d25e28"
+          }
+        },
+        {
+          "client_id": "495145137342-50oj10hlcj2s5v52d172poj56tcms433.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGkcxrrDwJH8o1I1dqcyoWqpzNGiQQmos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495145137342-50oj10hlcj2s5v52d172poj56tcms433.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
