@@ -6,14 +6,12 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import com.naldana.ejemplo10.utils.networking.Conection
 import com.naldana.ejemplo10.utils.networking.drivers.CurrencyDriver
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
