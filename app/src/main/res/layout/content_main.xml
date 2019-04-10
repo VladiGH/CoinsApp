@@ -9,8 +9,14 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/app_bar_main"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+    android:orientation="vertical">
     <!-- TODO (7.3) Note que se define solamente el recyclerview -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/testText"
+        android:text="@string/loading"/>
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="wrap_content"
