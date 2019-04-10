@@ -5,6 +5,7 @@ import com.naldana.ejemplo10.utils.ServerInfo
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.naldana.ejemplo10.utils.networking.interfaces.CurrencyInterface
+import com.naldana.ejemplo10.utils.converter.CurrencyConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,7 +39,10 @@ class CurrencyDriver {
                         when (response.code()) {
                             200 -> {
                                 Log.d(tag, "Repose: " + response.body())
-                                afterMetod(response.body()?: "Empty Database")
+                                CurrencyConverter().getCurrencyList(response.body()?: "{}").forEach{
+                                    Log.i(tag, "${it.name} ${it.country} ${it.year}")
+                                }
+                                afterMetod("si funciona")
                             }
 
                             else -> {
