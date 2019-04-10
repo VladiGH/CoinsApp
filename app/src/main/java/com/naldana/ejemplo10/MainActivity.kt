@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
-            driver.getCurrencies{ testFuntion(it)}
+            driver.getCurrencies(::testFuntion)
         }
 
 

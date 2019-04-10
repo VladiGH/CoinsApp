@@ -6,7 +6,7 @@ import com.naldana.ejemplo10.utils.ServerInfo
 
 interface CurrencyInterface {
 
-    @GET(ServerInfo.baseURL+ServerInfo.monedaUrl)
+    @GET(ServerInfo.monedaUrl)
     fun requestCurrencies(): Call<String>
 
 }
