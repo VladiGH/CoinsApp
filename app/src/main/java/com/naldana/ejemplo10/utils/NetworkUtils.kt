@@ -8,7 +8,7 @@ import java.net.URL
 import java.util.*
 
 class NetworkUtils {
-    val COIN_API_BASEURL = ""
+    val COIN_API_BASEURL = "https://conixap.firebaseio.com"
     val TOKEN_API = ""
 
     fun buildtSearchUrl(coinName: String) : URL {
