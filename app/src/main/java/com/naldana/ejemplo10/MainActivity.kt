@@ -6,22 +6,31 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import com.naldana.ejemplo10.adapter.MoneyAdapter
+import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.utils.networking.drivers.CurrencyDriver
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var twoPane =  false
-    val driver = CurrencyDriver()
     private val tag = "MainActivity"
 
-    fun testFuntion(msm: String){
-        findViewById<TextView>(R.id.testText).text = msm
+    fun setAdapter(data: ArrayList<Coin>){
+        findViewById<RecyclerView>(R.id.recyclerview).apply {
+            adapter = MoneyAdapter(data){
+                Log.i("datalink", it.name)
+            }
+            layoutManager = LinearLayoutManager(this.context)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
-            driver.getCurrencies(::testFuntion)
+            CurrencyDriver().getCurrencies(::setAdapter)
         }
 
 

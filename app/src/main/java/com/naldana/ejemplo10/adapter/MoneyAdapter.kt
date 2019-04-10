@@ -1,6 +1,5 @@
 package com.naldana.ejemplo10.adapter
 
-import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ class MoneyAdapter(var coins: List<Coin>, val clickListener: (Coin)-> Unit): Rec
         val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_coin, parent, false)
         return ViewHolder(view)
     }
+
 //TODO: HACER LA VIEW DE CADA MONEDA
     override fun getItemCount(): Int {
         return coins.size
@@ -30,4 +30,6 @@ class MoneyAdapter(var coins: List<Coin>, val clickListener: (Coin)-> Unit): Rec
             this.setOnClickListener{clickListener(item)}
         }
     }
+
+
 }
