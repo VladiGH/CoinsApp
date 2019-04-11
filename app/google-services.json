@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "495145137342-dpo7g5g22ut3d7u31b3f7kmtei81dpk6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naldana.ejemplo10",
+            "certificate_hash": "562702c37c12e091c7c2eed3bfe3ba3c83230785"
+          }
+        },
+        {
+          "client_id": "495145137342-ehtc1mfhro6nrliupopqgd6ilkl0esm4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naldana.ejemplo10",
+            "certificate_hash": "b4d338fcf9b6848d0210b0d00a27a812f680fe03"
+          }
+        },
+        {
           "client_id": "495145137342-50oj10hlcj2s5v52d172poj56tcms433.apps.googleusercontent.com",
           "client_type": 3
         }
