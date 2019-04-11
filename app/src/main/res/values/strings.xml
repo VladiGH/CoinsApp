@@ -9,4 +9,9 @@
     <string name="loading">Loading…</string>
     <string name="nombre_moneda">Nombre Moneda</string>
     <string name="pais_moneda">Pais Moneda</string>
+    <string name="name">Name</string>
+    <string name="country">country</string>
+    <string name="year">year</string>
+    <string name="available">available</string>
+    <string name="submit">Submit</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.naldana.ejemplo10
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -7,7 +8,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -45,8 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
-            CurrencyDriver().getCurrencies(::setAdapter)
+            startActivity(Intent(this, CurrencyAdder::class.java))
         }
 
 
@@ -81,6 +80,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
+        // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
+        CurrencyDriver().getCurrencies(::setAdapter)
     }
 
 
