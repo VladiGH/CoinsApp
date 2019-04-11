@@ -8,6 +8,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,14 +24,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     var twoPane =  false
     private val tag = "MainActivity"
+    private lateinit var manager: GridLayoutManager
 
     fun setAdapter(data: ArrayList<Coin>){
+        // TODO (20) Para saber si estamos en modo dos paneles
+        if (fragment_content != null ){
+            twoPane =  true
+        }
         recyclerview.apply {
             setHasFixedSize(true)
             adapter = MoneyAdapter(data){
                 Log.i("datalink", it.name)
             }
-            layoutManager = GridLayoutManager(this.context,2)
+            if(twoPane){
+            layoutManager = GridLayoutManager(this.context, 1)}
+            else{
+                layoutManager = GridLayoutManager(this.context, 2)
+            }
         }
 
     }
@@ -70,10 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (14.1) Es necesario implementar la inteface {{@NavigationView.OnNavigationItemSelectedListener}}
         nav_view.setNavigationItemSelectedListener(this)
 
-        // TODO (20) Para saber si estamos en modo dos paneles
-        if (fragment_content != null ){
-            twoPane =  true
-        }
+
 
 
         /*
@@ -82,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          */
         // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
         CurrencyDriver().getCurrencies(::setAdapter)
+
     }
 
 
