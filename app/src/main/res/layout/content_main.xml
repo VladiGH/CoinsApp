@@ -7,10 +7,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/app_bar_main"
         tools:context=".MainActivity"
-    android:orientation="vertical">
+    >
     <!-- TODO (7.3) Note que se define solamente el recyclerview -->
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"

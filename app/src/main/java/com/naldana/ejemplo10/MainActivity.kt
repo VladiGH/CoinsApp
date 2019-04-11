@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val tag = "MainActivity"
 
     fun setAdapter(data: ArrayList<Coin>){
-        findViewById<RecyclerView>(R.id.recyclerview).apply {
+        recyclerview.apply {
+            setHasFixedSize(true)
             adapter = MoneyAdapter(data){
                 Log.i("datalink", it.name)
             }
