@@ -25,7 +25,6 @@ class Database {
                         // whenever data at this location is updated.
                         val value = dataSnapshot.getValue(Coin::class.java)
                         Log.d(TAG, "Value is: ${value?.name}")
-                        dataRef.indexOf(value)
                         dataRef.replaceAll { if (it.name == value?.name ){ value} else {it}  }
                     }
 
@@ -38,7 +37,7 @@ class Database {
         database.child("monedas").push().setValue(dataCoin)
     }
 
-    fun fillData(dataRef: ArrayList<Coin>){
+    fun fillData(dataRef: ArrayList<Coin>, afterMetod: () -> Unit ){
         FirebaseDatabase.getInstance()
             .reference.child("monedas").apply {
             addValueEventListener(
@@ -49,8 +48,10 @@ class Database {
                         // whenever data at this location is updated.
                         val tempdata = dataSnapshot.children
                         for (coin in tempdata){
-                            dataRef.add(coin.getValue(Coin()::class.java)!!)
+                            Log.i("flow",coin.getValue(Coin::class.java)?.name )
+                            dataRef.add(coin.getValue(Coin::class.java)!!)
                         }
+                        afterMetod()
                     }
 
                     override fun onCancelled(error: DatabaseError) {

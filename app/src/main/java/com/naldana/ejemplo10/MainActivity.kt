@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        conexionDB.fillData(ultradata)
+        conexionDB.fillData(ultradata){recyclerview.adapter?.notifyDataSetChanged()}
         setAdapter(ultradata)
     }
 
@@ -76,8 +76,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (20) Para saber si estamos en modo dos paneles
         recyclerview.apply {
             setHasFixedSize(true)
+            Log.i("MainActivity", "Esta mierda se ejecuta")
             adapter = MoneyAdapter(data) {
-                Log.i(TAG, it.name)
+                Log.i("flow", "from main ${it.name} ${it.country}")
             }
             layoutManager = if (twoPane) {
                 GridLayoutManager(this.context, 1)
@@ -85,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 GridLayoutManager(this.context, 2)
             }
         }
-
     }
 
 
