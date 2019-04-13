@@ -8,8 +8,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -18,32 +16,15 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.utils.networking.drivers.CurrencyDriver
+import com.naldana.ejemplo10.utils.firebase.Database
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var twoPane =  false
-    private val tag = "MainActivity"
-    private lateinit var manager: GridLayoutManager
+    var twoPane = false
+    val ultradata = arrayListOf<Coin>()
+    val conexionDB = Database()
+    val TAG = "MainActivity"
 
-    fun setAdapter(data: ArrayList<Coin>){
-        // TODO (20) Para saber si estamos en modo dos paneles
-        if (fragment_content != null ){
-            twoPane =  true
-        }
-        recyclerview.apply {
-            setHasFixedSize(true)
-            adapter = MoneyAdapter(data){
-                Log.i("datalink", it.name)
-            }
-            if(twoPane){
-            layoutManager = GridLayoutManager(this.context, 1)}
-            else{
-                layoutManager = GridLayoutManager(this.context, 2)
-            }
-        }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,16 +61,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (14) Se configura el listener del menu que aparece en la barra lateral
         // TODO (14.1) Es necesario implementar la inteface {{@NavigationView.OnNavigationItemSelectedListener}}
         nav_view.setNavigationItemSelectedListener(this)
-
-
-
-
+        if (fragment_content != null) {
+            twoPane = true
+        }
         /*
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        // Este metodo se conecta a internet en el parametro y cuando termina ejecuta la funcion asynchrona
-        CurrencyDriver().getCurrencies(::setAdapter)
+        conexionDB.fillData(ultradata)
+        setAdapter(ultradata)
+    }
+
+    private fun setAdapter(data: ArrayList<Coin>) {
+        // TODO (20) Para saber si estamos en modo dos paneles
+        recyclerview.apply {
+            setHasFixedSize(true)
+            adapter = MoneyAdapter(data) {
+                Log.i(TAG, it.name)
+            }
+            layoutManager = if (twoPane) {
+                GridLayoutManager(this.context, 1)
+            } else {
+                GridLayoutManager(this.context, 2)
+            }
+        }
 
     }
 
