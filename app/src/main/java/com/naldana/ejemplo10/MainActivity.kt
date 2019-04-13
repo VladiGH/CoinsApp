@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.utils.firebase.Database
+import com.naldana.ejemplo10.firebase.Database
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

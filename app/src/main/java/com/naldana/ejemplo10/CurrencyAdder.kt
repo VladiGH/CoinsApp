@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.utils.firebase.Database
+import com.naldana.ejemplo10.firebase.Database
 
 class CurrencyAdder : AppCompatActivity() {
 

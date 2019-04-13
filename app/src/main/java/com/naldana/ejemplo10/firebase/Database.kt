@@ -1,4 +1,4 @@
-package com.naldana.ejemplo10.utils.firebase
+package com.naldana.ejemplo10.firebase
 
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -43,9 +43,11 @@ class Database {
             addValueEventListener(
                 object : ValueEventListener {
 
+                    @RequiresApi(Build.VERSION_CODES.N)
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         // This method is called once with the initial value and again
                         // whenever data at this location is updated.
+                        dataRef.clear()
                         val tempdata = dataSnapshot.children
                         for (coin in tempdata){
                             Log.i("flow",coin.getValue(Coin::class.java)?.name )
