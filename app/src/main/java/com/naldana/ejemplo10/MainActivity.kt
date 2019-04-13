@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var twoPane = false
     val ultradata = arrayListOf<Coin>()
     val conexionDB = Database()
+    val moneyF = MoneyFragment()
     val TAG = "MainActivity"
 
 
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setHasFixedSize(true)
             Log.i("MainActivity", "Esta mierda se ejecuta")
             adapter = MoneyAdapter(data) {
-                Log.i("flow", "from main ${it.name} ${it.country}")
+                moneyF.setData(it)
             }
             layoutManager = if (twoPane) {
                 GridLayoutManager(this.context, 1)
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 GridLayoutManager(this.context, 2)
             }
             if(twoPane){
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_content, MoneyFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
             }
         }
     }
