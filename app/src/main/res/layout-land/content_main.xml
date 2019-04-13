@@ -15,14 +15,13 @@
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="@dimen/list_width"
-            android:layout_height="wrap_content"
-            android:text="Hello World!" />
+            android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"></FrameLayout>
+        android:background="@color/colorAccent"/>
 
 </LinearLayout>

@@ -16,7 +16,7 @@ class CurrencyAdder : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency_adder)
         findViewById<Button>(R.id.submit).setOnClickListener{
-            database.addCurrency(gater(), savedInstanceState?.get("madata") as ArrayList<Coin>)
+            database.addCurrency(gater())
         }
     }
 

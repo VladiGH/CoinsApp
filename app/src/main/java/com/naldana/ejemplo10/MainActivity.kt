@@ -1,6 +1,5 @@
 package com.naldana.ejemplo10
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -17,6 +16,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.firebase.Database
+import com.naldana.ejemplo10.fragmentos.MoneyFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            startActivity(Intent(this, CurrencyAdder::class.java))
         }
 
 
@@ -85,6 +84,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 GridLayoutManager(this.context, 2)
             }
+            if(twoPane){
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_content, MoneyFragment()).commit()
+            }
         }
     }
 
@@ -124,10 +126,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
             R.id.nav_camera -> {
-
+                Log.i(TAG, "disponibel")
             }
             R.id.nav_gallery -> {
-
+                Log.i(TAG, "disponibel")
             }
             R.id.nav_slideshow -> {
 

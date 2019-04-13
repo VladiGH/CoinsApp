@@ -13,7 +13,7 @@ class Database {
 
     private val TAG = "Firebase"
 
-    fun addCurrency(dataCoin: Coin, dataRef: ArrayList<Coin>) {
+    fun addCurrency(dataCoin: Coin) {
         val database = FirebaseDatabase.getInstance()
             .reference.child("monedas").apply {
             addValueEventListener(
@@ -25,7 +25,6 @@ class Database {
                         // whenever data at this location is updated.
                         val value = dataSnapshot.getValue(Coin::class.java)
                         Log.d(TAG, "Value is: ${value?.name}")
-                        dataRef.replaceAll { if (it.name == value?.name ){ value} else {it}  }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
