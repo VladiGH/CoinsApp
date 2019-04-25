@@ -15,7 +15,7 @@ class Database {
 
     fun addCurrency(dataCoin: Coin) {
         val database = FirebaseDatabase.getInstance()
-            .reference.child("monedas").apply {
+            .reference.apply {
             addValueEventListener(
                 object : ValueEventListener {
 
