@@ -1,6 +1,9 @@
 package com.naldana.ejemplo10
 
+import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -14,18 +17,25 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
+import com.naldana.ejemplo10.database.DatabaseContract
 import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.firebase.Database
+import com.naldana.ejemplo10.database.DatabaseSQL
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var twoPane = false
+    var dbHelper = DatabaseSQL(this) // TODO (12) Se crea una instancia del SQLiteHelper definido en la clase Database.
     val ultradata = arrayListOf<Coin>()
     val conexionDB = Database()
     val moneyF = MoneyFragment()
     val TAG = "MainActivity"
+    var twoPane =  false
 
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
+            startActivity(intento)
         }
 
 
@@ -68,8 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        conexionDB.fillData(ultradata){recyclerview.adapter?.notifyDataSetChanged()}
-        setAdapter(ultradata)
+        conexionDB.fillData(ultradata, this::writeToLocalDB)
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
@@ -149,5 +160,70 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (15) Cuando se da click a un opcion del menu se cierra de manera automatica
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun writeToLocalDB(data: ArrayList<Coin>){
+      val db = dbHelper.writableDatabase
+        data.forEach {
+            val values = ContentValues().apply {
+                put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
+                put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
+                put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
+           //     put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, it.available)
+            }
+
+            val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
+
+            if (newRowId == -1L) {
+                Snackbar.make(findViewById(R.id.recyclerview), "ALV se cacaseo", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
+                    .show()
+                setAdapter(readMonedas())
+            }
+        }
+
+    }
+    private fun readMonedas(): ArrayList<Coin> {
+
+// TODO(13) Para obtener los datos almacenados, es necesario solicitar una instancia de lectura de la base de datos.
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID,
+            DatabaseContract.CoinEntry.COLUMN_NAME,
+            DatabaseContract.CoinEntry.COLUMN_COUNTRY,
+            DatabaseContract.CoinEntry.COLUMN_YEAR
+        )
+
+        val sortOrder = "${DatabaseContract.CoinEntry.COLUMN_NAME} DESC"
+
+        val cursor = db.query(
+            DatabaseContract.CoinEntry.TABLE_NAME, // nombre de la tabla
+            projection, // columnas que se devolverán
+            null, // Columns where clausule
+            null, // values Where clausule
+            null, // Do not group rows
+            null, // do not filter by row
+            sortOrder // sort order
+        )
+
+        var lista = ArrayList<Coin>()
+
+        with(cursor) {
+            while (moveToNext()) {
+                var coin = Coin(
+                    getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
+                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
+                    getLong(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR))
+                  //  getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))
+                )
+
+                lista.add(coin)
+            }
+        }
+
+        return lista
     }
 }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.naldana.ejemplo10.R
-import com.naldana.ejemplo10.pojo.Coin
 
 class MoneyFragment : Fragment() {
 

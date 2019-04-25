@@ -15,7 +15,7 @@ class Database {
 
     fun addCurrency(dataCoin: Coin) {
         val database = FirebaseDatabase.getInstance()
-            .reference.child("monedas").apply {
+            .reference.apply {
             addValueEventListener(
                 object : ValueEventListener {
 
@@ -36,7 +36,7 @@ class Database {
         database.child("monedas").push().setValue(dataCoin)
     }
 
-    fun fillData(dataRef: ArrayList<Coin>, afterMetod: () -> Unit ){
+    fun fillData(dataRef: ArrayList<Coin>, afterMetod: (ArrayList<Coin>) -> Unit ){
         FirebaseDatabase.getInstance()
             .reference.child("monedas").apply {
             addValueEventListener(
@@ -52,7 +52,7 @@ class Database {
                             Log.i("flow",coin.getValue(Coin::class.java)?.name )
                             dataRef.add(coin.getValue(Coin::class.java)!!)
                         }
-                        afterMetod()
+                        afterMetod(dataRef)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
