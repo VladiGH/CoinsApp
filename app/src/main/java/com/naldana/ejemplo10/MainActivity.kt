@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val conexionDB = Database()
     val moneyF = MoneyFragment()
     val TAG = "MainActivity"
-    var twoPane =  false
+    var twoPane = false
 
     override fun onDestroy() {
         dbHelper.close()
@@ -46,10 +46,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // TODO (10) Click Listener para el boton flotante
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-            val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
-            startActivity(intento)
+            conexionDB.fillData(ultradata, this::writeToLocalDB)
+            /*val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
+            startActivity(intento)*/
         }
 
 
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        conexionDB.fillData(ultradata, this::writeToLocalDB)
+        //setAdapter(readMonedas())
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 GridLayoutManager(this.context, 2)
             }
-            if(twoPane){
+            if (twoPane) {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
             }
         }
@@ -122,14 +121,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     // TODO (18) Atiende el click del menu de la barra
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_settings -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     // TODO (14.2) Funcion que recibe el ID del elemento tocado
@@ -162,14 +156,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    fun writeToLocalDB(data: ArrayList<Coin>){
-      val db = dbHelper.writableDatabase
+    private fun writeToLocalDB(data: ArrayList<Coin>) {
+        val db = dbHelper.writableDatabase
         data.forEach {
             val values = ContentValues().apply {
                 put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
                 put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
                 put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
-           //     put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, it.available)
+                put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, if (it.available) 1 else 0)
             }
 
             val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
@@ -179,21 +173,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
                     .show()
-                setAdapter(readMonedas())
+
             }
         }
 
     }
+
     private fun readMonedas(): ArrayList<Coin> {
-
-// TODO(13) Para obtener los datos almacenados, es necesario solicitar una instancia de lectura de la base de datos.
         val db = dbHelper.readableDatabase
-
         val projection = arrayOf(
             BaseColumns._ID,
             DatabaseContract.CoinEntry.COLUMN_NAME,
             DatabaseContract.CoinEntry.COLUMN_COUNTRY,
-            DatabaseContract.CoinEntry.COLUMN_YEAR
+            DatabaseContract.CoinEntry.COLUMN_YEAR,
+            DatabaseContract.CoinEntry.COLUMN_AVAILABLE
         )
 
         val sortOrder = "${DatabaseContract.CoinEntry.COLUMN_NAME} DESC"
@@ -213,13 +206,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         with(cursor) {
             while (moveToNext()) {
                 var coin = Coin(
-                    getInt(getColumnIndexOrThrow(BaseColumns._ID)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
-                    getLong(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR))
-                  //  getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))
+                    getLong(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
+                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))==1
                 )
-
+                Log.i("MainActivity", "From local database ${coin.name} ${coin.year}" )
                 lista.add(coin)
             }
         }

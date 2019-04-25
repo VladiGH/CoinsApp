@@ -11,7 +11,7 @@ import com.naldana.ejemplo10.pojo.Coin
 
 class Database {
 
-    private val TAG = "Firebase"
+    private val TAG = "FireBase"
 
     fun addCurrency(dataCoin: Coin) {
         val database = FirebaseDatabase.getInstance()
@@ -36,7 +36,7 @@ class Database {
         database.child("monedas").push().setValue(dataCoin)
     }
 
-    fun fillData(dataRef: ArrayList<Coin>, afterMetod: (ArrayList<Coin>) -> Unit ){
+    fun fillData(dataRef: ArrayList<Coin>, afterMethod: (ArrayList<Coin>) -> Unit ){
         FirebaseDatabase.getInstance()
             .reference.child("monedas").apply {
             addValueEventListener(
@@ -52,7 +52,7 @@ class Database {
                             Log.i("flow",coin.getValue(Coin::class.java)?.name )
                             dataRef.add(coin.getValue(Coin::class.java)!!)
                         }
-                        afterMetod(dataRef)
+                        afterMethod(dataRef)
                     }
 
                     override fun onCancelled(error: DatabaseError) {

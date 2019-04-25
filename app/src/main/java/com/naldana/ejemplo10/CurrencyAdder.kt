@@ -10,7 +10,7 @@ import com.naldana.ejemplo10.firebase.Database
 
 class CurrencyAdder : AppCompatActivity() {
 
-   val database = Database()
+   private val database = Database()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,7 +1,6 @@
 package com.naldana.ejemplo10.pojo
 
 data class Coin(
-    var _id: Int,
     var name: String = "N/A",
     var country: String = "N/A",
     var year: Long = 0,
