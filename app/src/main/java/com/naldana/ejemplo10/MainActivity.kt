@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             /*val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intento)*/
         }
-
+        addCoin.setOnClickListener{
+            val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
+            startActivity(intento)
+        }
 
         // TODO (11) Permite administrar el DrawerLayout y el ActionBar
         // TODO (11.1) Implementa las caracteristicas recomendas
