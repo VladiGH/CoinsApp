@@ -3,6 +3,7 @@ package com.naldana.ejemplo10
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -167,7 +168,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
                 put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
                 put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
-//                put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, it.available)
+           //     put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, it.available)
             }
 
             val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
@@ -177,9 +178,51 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
                     .show()
-                setAdapter(data)
+                setAdapter(readMonedas())
             }
         }
 
+    }
+    private fun readMonedas(): ArrayList<Coin> {
+
+// TODO(13) Para obtener los datos almacenados, es necesario solicitar una instancia de lectura de la base de datos.
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID,
+            DatabaseContract.CoinEntry.COLUMN_NAME,
+            DatabaseContract.CoinEntry.COLUMN_COUNTRY,
+            DatabaseContract.CoinEntry.COLUMN_YEAR
+        )
+
+        val sortOrder = "${DatabaseContract.CoinEntry.COLUMN_NAME} DESC"
+
+        val cursor = db.query(
+            DatabaseContract.CoinEntry.TABLE_NAME, // nombre de la tabla
+            projection, // columnas que se devolverán
+            null, // Columns where clausule
+            null, // values Where clausule
+            null, // Do not group rows
+            null, // do not filter by row
+            sortOrder // sort order
+        )
+
+        var lista = ArrayList<Coin>()
+
+        with(cursor) {
+            while (moveToNext()) {
+                var coin = Coin(
+                    getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
+                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
+                    getLong(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR))
+                  //  getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))
+                )
+
+                lista.add(coin)
+            }
+        }
+
+        return lista
     }
 }

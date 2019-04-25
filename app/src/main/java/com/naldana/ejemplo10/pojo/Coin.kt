@@ -1,8 +1,9 @@
 package com.naldana.ejemplo10.pojo
 
 data class Coin(
-    val name: String = "N/A",
-    val country: String = "N/A",
-    val year: Long = 0,
-    val available: Boolean = false
+    var _id: Int,
+    var name: String = "N/A",
+    var country: String = "N/A",
+    var year: Long = 0,
+    var available: Boolean = false
 )
