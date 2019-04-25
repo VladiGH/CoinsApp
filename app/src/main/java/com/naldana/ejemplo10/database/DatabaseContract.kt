@@ -19,6 +19,6 @@ object DatabaseContract {
         const val COLUMN_NAME = "username"
         const val COLUMN_COUNTRY = "email"
         const val COLUMN_YEAR = "year"
-
+        const val COLUMN_AVAILABLE = "available"
     }
 }

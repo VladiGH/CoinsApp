@@ -1,5 +1,6 @@
 package com.naldana.ejemplo10
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
+import com.naldana.ejemplo10.database.DatabaseContract
 import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.firebase.Database
 import com.naldana.ejemplo10.database.DatabaseSQL
@@ -76,8 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        conexionDB.fillData(ultradata){recyclerview.adapter?.notifyDataSetChanged()}
-        setAdapter(ultradata)
+        conexionDB.fillData(ultradata, this::writeToLocalDB)
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
@@ -157,5 +158,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (15) Cuando se da click a un opcion del menu se cierra de manera automatica
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun writeToLocalDB(data: ArrayList<Coin>){
+      val db = dbHelper.writableDatabase
+        data.forEach {
+            val values = ContentValues().apply {
+                put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
+                put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
+                put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
+//                put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, it.available)
+            }
+
+            val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
+
+            if (newRowId == -1L) {
+                Snackbar.make(findViewById(R.id.recyclerview), "ALV se cacaseo", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
+                    .show()
+                setAdapter(data)
+            }
+        }
+
     }
 }
