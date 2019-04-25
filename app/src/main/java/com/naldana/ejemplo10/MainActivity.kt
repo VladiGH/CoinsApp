@@ -1,5 +1,6 @@
 package com.naldana.ejemplo10
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -20,11 +21,10 @@ import com.naldana.ejemplo10.fragmentos.MoneyFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var twoPane = false
     val ultradata = arrayListOf<Coin>()
     val conexionDB = Database()
     val TAG = "MainActivity"
-
+    var twoPane =  false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
+            startActivity(intento)
         }
 
 
