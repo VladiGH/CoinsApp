@@ -17,14 +17,21 @@ import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.firebase.Database
+import com.naldana.ejemplo10.database.DatabaseSQL
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    var dbHelper = DatabaseSQL(this) // TODO (12) Se crea una instancia del SQLiteHelper definido en la clase Database.
     val ultradata = arrayListOf<Coin>()
     val conexionDB = Database()
     val TAG = "MainActivity"
     var twoPane =  false
+
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

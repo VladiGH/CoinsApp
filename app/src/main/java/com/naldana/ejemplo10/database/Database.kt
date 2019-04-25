@@ -26,7 +26,7 @@ private const val SQL_DELETE_ENTRIES =
 // TODO(5.1) SQLiteOperHelper tiene su propio ciclo de vida: Creación de base de datos, cambios de versión (upgrading y downgrading).
 // TODO(5.2) Para crear un SQLiteOperHelper se necesita un contexto, el nombre de la base de datos, y la versión de base de datos.
 // TODO(5.3) Si se desea tener más de una base de datos, se puede crear varios SQLiteOperHelper o crear uno capaz de saber qué base de datos se está creando.
-class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class DatabaseSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     // TODO(8) Este método se ejecuta cuando es necesario crear el esquema de base de datos.
     // TODO(8.1) Este recibe como parámetro una instancia de SQLiteDatabase y que permite ejecutar SQL de DDL.
