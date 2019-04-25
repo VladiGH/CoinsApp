@@ -23,7 +23,7 @@ class CurrencyAdder : AppCompatActivity() {
     private fun gater():Coin = Coin(
         findViewById<EditText>(R.id.editText_name).text.toString(),
         findViewById<EditText>(R.id.editText_country).text.toString(),
-        findViewById<EditText>(R.id.editText_year).text.toString().toLong(),
+        findViewById<EditText>(R.id.editText_year).text.toString().toInt(),
         findViewById<CheckBox>(R.id.available).isChecked
     )
 }

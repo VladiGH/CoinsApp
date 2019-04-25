@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         // TODO (10) Click Listener para el boton flotante
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             conexionDB.fillData(ultradata, this::writeToLocalDB)
             /*val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intento)*/
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        //setAdapter(readMonedas())
+        setAdapter(readMonedas())
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
@@ -173,7 +173,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
                     .show()
-
             }
         }
 
@@ -208,7 +207,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 var coin = Coin(
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
-                    getLong(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
+                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))==1
                 )
                 Log.i("MainActivity", "From local database ${coin.name} ${coin.year}" )

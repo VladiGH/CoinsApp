@@ -12,7 +12,7 @@ private const val SQL_CREATE_ENTRIES =
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
             "${DatabaseContract.CoinEntry.COLUMN_NAME} TEXT," +
             "${DatabaseContract.CoinEntry.COLUMN_COUNTRY} TEXT," +
-            "${DatabaseContract.CoinEntry.COLUMN_YEAR} TEXT" +
+            "${DatabaseContract.CoinEntry.COLUMN_YEAR} TEXT," +
             "${DatabaseContract.CoinEntry.COLUMN_AVAILABLE} INTEGER)"
 
 
@@ -44,6 +44,6 @@ class DatabaseSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
     // TODO(11) Se definen en constantes, el nombre de la base de datos y la versión
     companion object {
         const val DATABASE_NAME = "miprimerabase.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
     }
 }
