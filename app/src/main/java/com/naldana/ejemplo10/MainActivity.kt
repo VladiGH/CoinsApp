@@ -116,7 +116,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setHasFixedSize(true)
             Log.i("MainActivity", "Esta mierda se ejecuta")
             adapter = MoneyAdapter(data) {
-                moneyF.setData(it)
+                if (twoPane) moneyF.setData(it) else {
+                    Log.i(TAG, "hacer algo cool como abrir otra activity aqui y le pasamos la moneda")
+                }
             }
             layoutManager = if (twoPane) {
                 GridLayoutManager(this.context, 1)
