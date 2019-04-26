@@ -26,7 +26,7 @@ import com.naldana.ejemplo10.fragmentos.MoneyFragment
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var dbHelper = DatabaseSQL(this) // TODO (12) Se crea una instancia del SQLiteHelper definido en la clase Database.
-    val ultradata = arrayListOf<Coin>()
+    val  ultradata = ArrayList<Coin>()
     val conexionDB = Database()
     val moneyF = MoneyFragment()
     val TAG = "MainActivity"
@@ -46,11 +46,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // TODO (10) Click Listener para el boton flotante
         fab.setOnClickListener {
-            conexionDB.fillData(ultradata, this::writeToLocalDB)
-            /*val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
-            startActivity(intento)*/
+            conexionDB.fillData(ultradata){
+                writeToLocalDB(ultradata)
+                recyclerview.adapter?.notifyDataSetChanged()
+            }
         }
-        addCoin.setOnClickListener{
+
+        addCoin.setOnClickListener {
             val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intento)
         }
@@ -82,7 +84,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
          * Y la obtencion de datos para el API de Monedas
          */
-        setAdapter(readMonedas())
+        ultradata.addAll(readMonedas())
+        setAdapter(ultradata)
+        recyclerview.adapter?.notifyDataSetChanged()
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
@@ -161,6 +165,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun writeToLocalDB(data: ArrayList<Coin>) {
         val db = dbHelper.writableDatabase
+        val listabase = readMonedas()
         data.forEach {
             val values = ContentValues().apply {
                 put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
@@ -168,23 +173,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
                 put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, if (it.available) 1 else 0)
             }
-
-            val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
-
-            if (newRowId == -1L) {
-                Snackbar.make(findViewById(R.id.recyclerview), "ALV se cacaseo", Snackbar.LENGTH_SHORT).show()
-            } else {
-                Snackbar.make(findViewById(R.id.recyclerview), "si funciono $newRowId", Snackbar.LENGTH_SHORT)
-                    .show()
+            if (!listabase.contains(it)) {
+                val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
+                if (newRowId == -1L) {
+                    Snackbar.make(findViewById(R.id.recyclerview), "ALV se cacaseo ${it.name}", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
-
     }
 
     private fun readMonedas(): ArrayList<Coin> {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(
-            BaseColumns._ID,
             DatabaseContract.CoinEntry.COLUMN_NAME,
             DatabaseContract.CoinEntry.COLUMN_COUNTRY,
             DatabaseContract.CoinEntry.COLUMN_YEAR,
@@ -203,17 +204,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             sortOrder // sort order
         )
 
-        var lista = ArrayList<Coin>()
+        val lista = ArrayList<Coin>()
 
         with(cursor) {
             while (moveToNext()) {
-                var coin = Coin(
+                val coin = Coin(
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
-                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE))==1
+                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE)) == 1
                 )
-                Log.i("MainActivity", "From local database ${coin.name} ${coin.year}" )
+                Log.i("MainActivity", "From local database ${coin.name} ${coin.year}")
                 lista.add(coin)
             }
         }
