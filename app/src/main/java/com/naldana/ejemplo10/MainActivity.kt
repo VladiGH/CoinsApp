@@ -3,7 +3,6 @@ package com.naldana.ejemplo10
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -13,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.animation.Animation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -22,6 +22,13 @@ import com.naldana.ejemplo10.pojo.Coin
 import com.naldana.ejemplo10.firebase.Database
 import com.naldana.ejemplo10.database.DatabaseSQL
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.AnimationSet
+import android.view.animation.RotateAnimation
+
+
+
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,6 +53,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // TODO (10) Click Listener para el boton flotante
         fab.setOnClickListener {
+            val animSet = AnimationSet(true)
+            animSet.interpolator = DecelerateInterpolator()
+            animSet.fillAfter = true
+            animSet.isFillEnabled = true
+            val animRotate = RotateAnimation(
+                0.0f, 360.0f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f
+            )
+            animRotate.duration = 1500
+            animRotate.fillAfter = true
+            animRotate.repeatCount = Animation.INFINITE;
+            animSet.addAnimation(animRotate)
+            it.startAnimation(animSet)
             conexionDB.fillData(ultradata){
                 writeToLocalDB(ultradata)
                 recyclerview.adapter?.notifyDataSetChanged()
