@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.naldana.ejemplo10.pojo.Coin
+import com.naldana.ejemplo10.pojo.Country
 
 class Database {
 
@@ -34,6 +35,29 @@ class Database {
                 })
         }
         database.child("monedas").push().setValue(dataCoin)
+    }
+
+    fun addCountry(country: Country){
+        val database = FirebaseDatabase.getInstance()
+            .reference.apply {
+            addValueEventListener(
+                object : ValueEventListener {
+
+                    @RequiresApi(Build.VERSION_CODES.N)
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        val value = dataSnapshot.getValue(Country::class.java)
+                        Log.d(TAG, "Value is: ${value?.name}")
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException())
+                    }
+                })
+        }
+        database.child("countries").push().setValue(country)
     }
 
     fun fillData(dataRef: ArrayList<Coin>, afterMethod: () -> Unit ){
