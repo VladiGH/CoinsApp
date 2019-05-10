@@ -15,6 +15,8 @@
     <string name="available">available</string>
     <string name="submit">Submit</string>
     <string name="ahuevo">Ahuevo</string>
+    <string name="moneda">Moneda</string>
+    <string name="anio">anio</string>
     <string name="order">Order by</string>
     <string name="region">Region</string>
     <string name="alphabetic_decedent">Alphabetic decedent</string>
