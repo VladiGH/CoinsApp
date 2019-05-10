@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:orientation="vertical">
 
 
@@ -22,14 +22,12 @@
                 android:id="@+id/name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="nombre moneda"
+                android:text="@string/moneda"
                 android:layout_gravity="center"
                 android:textSize="@dimen/tittle_size"
                 />
 
         </LinearLayout>
-
-
 
     </LinearLayout>
 
@@ -38,7 +36,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="3"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -52,7 +50,7 @@
                 android:id="@+id/country_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ahuevo"
+                android:text="@string/country"
                 android:textSize="@dimen/normal_size"
                 />
 
@@ -60,7 +58,7 @@
                 android:id="@+id/year_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="anio"
+                android:text="@string/anio"
                 android:layout_marginBottom="40dp"
                 android:layout_marginTop="40dp"
                 android:textSize="@dimen/normal_size"/>
@@ -69,7 +67,7 @@
                 android:id="@+id/available_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="disponible"
+                android:text="@string/available"
                 android:textSize="@dimen/normal_size"
                 />
         </LinearLayout>

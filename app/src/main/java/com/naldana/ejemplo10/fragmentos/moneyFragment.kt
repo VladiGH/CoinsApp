@@ -20,10 +20,10 @@ class MoneyFragment : Fragment() {
     }
 
     fun setData(currentCoin: Coin){
-        sho.findViewById<TextView>(R.id.year_text).text = currentCoin.year.toString()
-        sho.findViewById<TextView>(R.id.name_text).text = currentCoin.name
-        sho.findViewById<TextView>(R.id.country_text).text = currentCoin.country
-        sho.findViewById<TextView>(R.id.available_text).text = currentCoin.available.toString()
+        sho.findViewById<TextView>(R.id.year_text).text = "Year: "+currentCoin.year.toString()
+        sho.findViewById<TextView>(R.id.name_text).text = "Nombre: "+currentCoin.name
+        sho.findViewById<TextView>(R.id.country_text).text = "Country: "+currentCoin.country
+        sho.findViewById<TextView>(R.id.available_text).text = "Is available?: " +currentCoin.available.toString()
     }
 
 }

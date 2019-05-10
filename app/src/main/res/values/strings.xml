@@ -15,4 +15,6 @@
     <string name="available">available</string>
     <string name="submit">Submit</string>
     <string name="ahuevo">Ahuevo</string>
+    <string name="moneda">Moneda</string>
+    <string name="anio">anio</string>
 </resources>
