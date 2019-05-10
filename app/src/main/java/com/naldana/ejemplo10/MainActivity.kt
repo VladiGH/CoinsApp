@@ -1,6 +1,5 @@
 package com.naldana.ejemplo10
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -17,20 +16,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
-import com.naldana.ejemplo10.database.DatabaseContract
 import com.naldana.ejemplo10.models.Coin
 import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.AnimationSet
 import android.view.animation.RotateAnimation
+import com.naldana.ejemplo10.models.Country
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val tag = this@MainActivity::class.java.simpleName
     private val moneyF = MoneyFragment()
-    private val dataProvider = DataProvider(applicationContext)
+    private val dataProvider = DataProvider(this@MainActivity)
     private var twoPane = false
 
     override fun onDestroy() {
@@ -57,12 +56,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             animRotate.repeatCount = Animation.INFINITE
             animSet.addAnimation(animRotate)
             it.startAnimation(animSet)
-            dataProvider.fillData(this@MainActivity.coinList){
-                writeToLocalDB(this@MainActivity.coinList)
-                recyclerview.adapter?.notifyDataSetChanged()
-            }
+            recyclerview.adapter?.notifyDataSetChanged()
         }
-
         addCoin.setOnClickListener {
             val intent = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intent)
@@ -81,23 +76,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (fragment_content != null) {
             twoPane = true
         }
-        coinList.addAll(readMonedas())
-        setAdapter(coinList)
+        dataProvider.syncData(Coin::class.java){
+            setAdapter(it)
+            recyclerview.adapter?.notifyDataSetChanged()
+        }
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
+        data.forEach { coin ->  Log.i(tag, "ejecutando setAdapter <E> ${coin.name}")}
         recyclerview.apply {
             setHasFixedSize(true)
             adapter = MoneyAdapter(data) {
                 if (twoPane) {
-                    layoutManager = GridLayoutManager(this.context, 1)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
                     moneyF.setData(it)
                 } else {
-                    GridLayoutManager(this.context, 2)
                     //TODO 10 hacer algo cool como abrir otra activity aqui y le pasamos la moneda
                 }
             }
+            layoutManager =
+                if (twoPane){
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
+                    GridLayoutManager(this.context, 1)
+                }
+                else GridLayoutManager(this.context, 2)
         }
     }
 
@@ -133,19 +134,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
             R.id.filter_region -> {
                 Log.i(tag, "disponibel")
-                dataProvider.getCountries(countryList, recyclerview.adapter.notifyDataSetChanged())
-            }
-            R.id.filter_AZ -> {
-                Log.i(tag, "disponibel")
-                this.coinList.forEach{
-                    Log.i(tag, it._id)
+                dataProvider.syncData(Country::class.java){
+                    it.forEach{ country ->
+                        Log.i(tag, country._id)
+                    }
                 }
             }
-            R.id.filter_ZA -> {
+            R.id.filter_AZ -> {
+                Log.i(tag, "filter_AZ")
 
             }
+            R.id.filter_ZA -> {
+                Log.i(tag, "filter_ZA")
+            }
             R.id.equivalence -> {
-
+                Log.i(tag, "equivalence")
             }
             R.id.nav_share -> {
 
@@ -158,65 +161,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // TODO (15) Cuando se da click a un opcion del menu se cierra de manera automatica
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    private fun writeToLocalDB(data: ArrayList<Coin>) {
-        val db = dbHelper.writableDatabase
-        val listabase = readMonedas()
-        data.forEach {
-            val values = ContentValues().apply {
-                put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
-                put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
-                put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
-                put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, if (it.available) 1 else 0)
-            }
-            if (!listabase.contains(it)) {
-                val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
-                if (newRowId == -1L) {
-                    Snackbar.make(findViewById(R.id.recyclerview), "ALV se cacaseo ${it.name}", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-    }
-
-    private fun readMonedas(): ArrayList<Coin> {
-        val db = dbHelper.readableDatabase
-        val projection = arrayOf(
-            DatabaseContract.CoinEntry.COLUMN_NAME,
-            DatabaseContract.CoinEntry.COLUMN_COUNTRY,
-            DatabaseContract.CoinEntry.COLUMN_YEAR,
-            DatabaseContract.CoinEntry.COLUMN_AVAILABLE
-        )
-
-        val sortOrder = "${DatabaseContract.CoinEntry.COLUMN_NAME} DESC"
-
-        val cursor = db.query(
-            DatabaseContract.CoinEntry.TABLE_NAME, // nombre de la tabla
-            projection, // columnas que se devolverán
-            null, // Columns where clausule
-            null, // values Where clausule
-            null, // Do not group rows
-            null, // do not filter by row
-            sortOrder // sort order
-        )
-
-        val lista = ArrayList<Coin>()
-
-        with(cursor) {
-            while (moveToNext()) {
-                val coin = Coin(
-                    null,
-                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
-                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
-                    getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE)) == 1
-                )
-                Log.i("MainActivity", "From local database ${coin.name} ${coin.year}")
-                lista.add(coin)
-            }
-        }
-
-        return lista
     }
 }
