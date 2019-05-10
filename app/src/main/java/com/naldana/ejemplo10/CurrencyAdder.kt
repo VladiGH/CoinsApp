@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.firebase.Database
+import com.naldana.ejemplo10.models.Coin
+import com.naldana.ejemplo10.database.RealTimeDatabase
 
 class CurrencyAdder : AppCompatActivity() {
 
-   private val database = Database()
+   private val database = RealTimeDatabase()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +21,7 @@ class CurrencyAdder : AppCompatActivity() {
     }
 
     private fun gater():Coin = Coin(
+        null,
         findViewById<EditText>(R.id.editText_name).text.toString(),
         findViewById<EditText>(R.id.editText_country).text.toString(),
         findViewById<EditText>(R.id.editText_year).text.toString().toInt(),

@@ -1,4 +1,4 @@
-package com.naldana.ejemplo10.firebase
+package com.naldana.ejemplo10.database
 
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -7,16 +7,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.pojo.Country
+import com.naldana.ejemplo10.models.Coin
+import com.naldana.ejemplo10.models.Country
 
-class Database {
+class RealTimeDatabase {
 
     private val TAG = "FireBase"
+    val database = FirebaseDatabase.getInstance()
 
     fun addCurrency(dataCoin: Coin) {
-        val database = FirebaseDatabase.getInstance()
-            .reference.apply {
+        val ref = database.reference.apply {
             addValueEventListener(
                 object : ValueEventListener {
 
@@ -34,7 +34,7 @@ class Database {
                     }
                 })
         }
-        database.child("monedas").push().setValue(dataCoin)
+        ref.child("monedas").push().setValue(dataCoin)
     }
 
     fun addCountry(country: Country){
@@ -72,9 +72,12 @@ class Database {
                         // whenever data at this location is updated.
                         dataRef.clear()
                         val tempdata = dataSnapshot.children
-                        for (coin in tempdata){
-                            Log.i("flow",coin.getValue(Coin::class.java)?.name )
-                            dataRef.add(coin.getValue(Coin::class.java)!!)
+                        for (coinSnap in tempdata){
+                            val coin = coinSnap.getValue(Coin::class.java)
+                            coin?._id = coinSnap.key
+                            dataRef.add(coin!!)
+                            Log.i("flow","cargado de fierbase ${coin._id}")
+
                         }
                         afterMethod()
                     }
@@ -86,6 +89,33 @@ class Database {
                 })
         }
 
+    }
+
+    fun updateCoutny(country: Country){
+        database.reference.child("countries").child(country._id!!).push().setValue(country)
+    }
+
+    fun getCountries(dataRef: ArrayList<Country>, callBack: () -> Unit){
+        database.reference.child("countries").apply {
+            addValueEventListener(
+                object : ValueEventListener {
+
+                    @RequiresApi(Build.VERSION_CODES.N)
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val tempData = dataSnapshot.children
+                        for (country in tempData){
+                            Log.i("flow",country.getValue(Country::class.java)?._id)
+                            dataRef.add(country.getValue(Country::class.java)!!)
+                        }
+                        callBack()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException())
+                    }
+                })
+        }
     }
 
 

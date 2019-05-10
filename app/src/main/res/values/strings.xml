@@ -15,4 +15,12 @@
     <string name="available">available</string>
     <string name="submit">Submit</string>
     <string name="ahuevo">Ahuevo</string>
+    <string name="order">Order by</string>
+    <string name="region">Region</string>
+    <string name="alphabetic_decedent">Alphabetic decedent</string>
+    <string name="alphabetic_ascendant">Alphabetic Ascendant</string>
+    <string name="equivalence">Equivalence</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
 </resources>

@@ -5,40 +5,47 @@
       tools:showIn="navigation_view">
 
     <!-- TODO (3.4) Los grupos de menu pueden definirse  con la etiqueta group -->
-    <group android:checkableBehavior="single">
+    <!-- TODO (3.5) Los mienbros del menu necesitan ID, TITLE-->
+    <item
+            android:title="@string/order">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                        android:id="@+id/filter_region"
+                        android:icon="@drawable/ic_gps_fixed_black_24dp"
+                        android:title="@string/region"/>
 
-        <!-- TODO (3.5) Los mienbros del menu necesitan ID, TITLE-->
-        <item
-                android:id="@+id/nav_camera"
-                android:icon="@drawable/ic_menu_camera"
-                android:title="Import"/>
-        <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Gallery"/>
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Slideshow"/>
-        <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Tools"/>
-    </group>
+                <item
+                        android:id="@+id/filter_AZ"
+                        android:icon="@drawable/ic_sort_by_alpha_black_24dp"
+                        android:title="@string/alphabetic_decedent"/>
+
+                <item
+                        android:id="@+id/filter_ZA"
+                        android:icon="@drawable/ic_sort_by_alpha_black_24dp"
+                        android:title="@string/alphabetic_ascendant"/>
+
+                <item
+                        android:id="@+id/equivalence"
+                        android:icon="@drawable/ic_attach_money_black_24dp"
+                        android:title="@string/equivalence"/>
+            </group>
+        </menu>
+    </item>
 
     <!-- TODO (3.6) Se puede definir  seccion con Communicate -->
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <!-- TODO (3.7) Debe definirse un menu -->
         <menu>
             <!-- TODO (3.7) Y lo elementos que lo conforman -->
             <item
                     android:id="@+id/nav_share"
                     android:icon="@drawable/ic_menu_share"
-                    android:title="Share"/>
+                    android:title="@string/share"/>
             <item
                     android:id="@+id/nav_send"
                     android:icon="@drawable/ic_menu_send"
-                    android:title="Send"/>
+                    android:title="@string/send"/>
         </menu>
     </item>
 

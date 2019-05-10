@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.naldana.ejemplo10.R
-import com.naldana.ejemplo10.pojo.Coin
+import com.naldana.ejemplo10.models.Coin
 import kotlinx.android.synthetic.main.cardview_coin.view.*
 
 class MoneyAdapter(var coins: List<Coin>, val clickListener: (Coin)-> Unit): RecyclerView.Adapter<MoneyAdapter.ViewHolder>() {

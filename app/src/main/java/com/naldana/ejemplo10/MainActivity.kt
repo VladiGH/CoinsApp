@@ -18,40 +18,30 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.database.DatabaseContract
-import com.naldana.ejemplo10.pojo.Coin
-import com.naldana.ejemplo10.firebase.Database
-import com.naldana.ejemplo10.database.DatabaseSQL
+import com.naldana.ejemplo10.models.Coin
+import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.AnimationSet
 import android.view.animation.RotateAnimation
 
 
-
-
-
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var dbHelper = DatabaseSQL(this) // TODO (12) Se crea una instancia del SQLiteHelper definido en la clase Database.
-    val  ultradata = ArrayList<Coin>()
-    val conexionDB = Database()
-    val moneyF = MoneyFragment()
-    val TAG = "MainActivity"
-    var twoPane = false
+    private val tag = this@MainActivity::class.java.simpleName
+    private val moneyF = MoneyFragment()
+    private val dataProvider = DataProvider(applicationContext)
+    private var twoPane = false
 
     override fun onDestroy() {
-        dbHelper.close()
         super.onDestroy()
+        dataProvider.closeDb()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        // TODO (9) Se asigna a la actividad la barra personalizada
         setSupportActionBar(toolbar)
-
-
-        // TODO (10) Click Listener para el boton flotante
         fab.setOnClickListener {
             val animSet = AnimationSet(true)
             animSet.interpolator = DecelerateInterpolator()
@@ -64,69 +54,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             animRotate.duration = 1500
             animRotate.fillAfter = true
-            animRotate.repeatCount = Animation.INFINITE;
+            animRotate.repeatCount = Animation.INFINITE
             animSet.addAnimation(animRotate)
             it.startAnimation(animSet)
-            conexionDB.fillData(ultradata){
-                writeToLocalDB(ultradata)
+            dataProvider.fillData(this@MainActivity.coinList){
+                writeToLocalDB(this@MainActivity.coinList)
                 recyclerview.adapter?.notifyDataSetChanged()
             }
         }
 
         addCoin.setOnClickListener {
-            val intento = Intent(this@MainActivity, CurrencyAdder::class.java)
-            startActivity(intento)
+            val intent = Intent(this@MainActivity, CurrencyAdder::class.java)
+            startActivity(intent)
         }
 
-        // TODO (11) Permite administrar el DrawerLayout y el ActionBar
-        // TODO (11.1) Implementa las caracteristicas recomendas
-        // TODO (11.2) Un DrawerLayout (drawer_layout)
-        // TODO (11.3) Un lugar donde dibujar el indicador de apertura (la toolbar)
-        // TODO (11.4) Una String que describe el estado de apertura
-        // TODO (11.5) Una String que describe el estado cierre
         val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this@MainActivity,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
-
-        // TODO (12) Con el Listener Creado se asigna al  DrawerLayout
         drawer_layout.addDrawerListener(toggle)
-
-
-        // TODO(13) Se sincroniza el estado del menu con el LISTENER
         toggle.syncState()
-
-        // TODO (14) Se configura el listener del menu que aparece en la barra lateral
-        // TODO (14.1) Es necesario implementar la inteface {{@NavigationView.OnNavigationItemSelectedListener}}
-        nav_view.setNavigationItemSelectedListener(this)
+        nav_view.setNavigationItemSelectedListener(this@MainActivity)
         if (fragment_content != null) {
             twoPane = true
         }
-        /*
-         * TODO (Instrucciones)Luego de leer todos los comentarios añada la implementación de RecyclerViewAdapter
-         * Y la obtencion de datos para el API de Monedas
-         */
-        ultradata.addAll(readMonedas())
-        setAdapter(ultradata)
-        recyclerview.adapter?.notifyDataSetChanged()
+        coinList.addAll(readMonedas())
+        setAdapter(coinList)
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
-        // TODO (20) Para saber si estamos en modo dos paneles
         recyclerview.apply {
             setHasFixedSize(true)
-            Log.i("MainActivity", "Esta mierda se ejecuta")
             adapter = MoneyAdapter(data) {
-                if (twoPane) moneyF.setData(it) else {
-                    Log.i(TAG, "hacer algo cool como abrir otra activity aqui y le pasamos la moneda")
+                if (twoPane) {
+                    layoutManager = GridLayoutManager(this.context, 1)
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
+                    moneyF.setData(it)
+                } else {
+                    GridLayoutManager(this.context, 2)
+                    //TODO 10 hacer algo cool como abrir otra activity aqui y le pasamos la moneda
                 }
-            }
-            layoutManager = if (twoPane) {
-                GridLayoutManager(this.context, 1)
-            } else {
-                GridLayoutManager(this.context, 2)
-            }
-            if (twoPane) {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
             }
         }
     }
@@ -161,16 +131,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
-            R.id.nav_camera -> {
-                Log.i(TAG, "disponibel")
+            R.id.filter_region -> {
+                Log.i(tag, "disponibel")
+                dataProvider.getCountries(countryList, recyclerview.adapter.notifyDataSetChanged())
             }
-            R.id.nav_gallery -> {
-                Log.i(TAG, "disponibel")
+            R.id.filter_AZ -> {
+                Log.i(tag, "disponibel")
+                this.coinList.forEach{
+                    Log.i(tag, it._id)
+                }
             }
-            R.id.nav_slideshow -> {
+            R.id.filter_ZA -> {
 
             }
-            R.id.nav_manage -> {
+            R.id.equivalence -> {
 
             }
             R.id.nav_share -> {
@@ -232,6 +206,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         with(cursor) {
             while (moveToNext()) {
                 val coin = Coin(
+                    null,
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
