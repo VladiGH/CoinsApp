@@ -2,7 +2,6 @@ package com.naldana.ejemplo10
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -22,7 +21,6 @@ import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.AnimationSet
 import android.view.animation.RotateAnimation
-import com.naldana.ejemplo10.models.Country
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -76,14 +74,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (fragment_content != null) {
             twoPane = true
         }
-        dataProvider.syncData(Coin::class.java){
+        dataProvider.pullData(Coin::class.java){
             setAdapter(it)
             recyclerview.adapter?.notifyDataSetChanged()
         }
     }
 
     private fun setAdapter(data: ArrayList<Coin>) {
-        data.forEach { coin ->  Log.i(tag, "ejecutando setAdapter <E> ${coin.name}")}
+        data.forEach { coin ->  Log.i(tag, "ejecutando setAdapter <E> ${coin._id}")}
         recyclerview.apply {
             setHasFixedSize(true)
             adapter = MoneyAdapter(data) {
@@ -133,19 +131,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
             R.id.filter_region -> {
-                Log.i(tag, "disponibel")
-                dataProvider.syncData(Country::class.java){
-                    it.forEach{ country ->
-                        Log.i(tag, country._id)
-                    }
-                }
-            }
-            R.id.filter_AZ -> {
-                Log.i(tag, "filter_AZ")
 
             }
+            R.id.filter_AZ -> {
+                (recyclerview.adapter as MoneyAdapter).sortDataByName()
+            }
             R.id.filter_ZA -> {
-                Log.i(tag, "filter_ZA")
+                (recyclerview.adapter as MoneyAdapter).sortDataByName(false)
             }
             R.id.equivalence -> {
                 Log.i(tag, "equivalence")
