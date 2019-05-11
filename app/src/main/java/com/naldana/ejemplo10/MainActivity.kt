@@ -7,31 +7,29 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.animation.Animation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.naldana.ejemplo10.adapter.MoneyAdapter
-import com.naldana.ejemplo10.models.Coin
 import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.AnimationSet
-import android.view.animation.RotateAnimation
+import com.naldana.ejemplo10.activities.CurrencyAdder
 import com.naldana.ejemplo10.database.LocalDB
-import kotlin.random.Random
+import com.naldana.ejemplo10.utilities.ViewAnimator
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val tag = this@MainActivity::class.java.simpleName
-    private val moneyF = MoneyFragment()
+    //private val tag = this@MainActivity::class.java.simpleName
     private val dataProvider = DataProvider(this@MainActivity)
     private val localDB = LocalDB(this@MainActivity)
     private var twoPane = false
+    private val animator = ViewAnimator()
+    private lateinit var moneyF: MoneyFragment
+    private lateinit var moneyAdapter: MoneyAdapter
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -43,20 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         fab.setOnClickListener {
-            val animSet = AnimationSet(true)
-            animSet.interpolator = DecelerateInterpolator()
-            animSet.fillAfter = true
-            animSet.isFillEnabled = true
-            val animRotate = RotateAnimation(
-                0.0f, 360.0f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f
-            )
-            animRotate.duration = 1500
-            animRotate.fillAfter = true
-            animRotate.repeatCount = Animation.INFINITE
-            animSet.addAnimation(animRotate)
-            it.startAnimation(animSet)
+            it.startAnimation(animator.getRotationAnimation())
             recyclerview.adapter?.notifyDataSetChanged()
         }
         addCoin.setOnClickListener {
@@ -76,9 +61,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this@MainActivity)
         if (fragment_content != null) {
             twoPane = true
+            moneyF = MoneyFragment()
         }
         dataProvider.loadCoinList{
-            setAdapter(it)
+            moneyAdapter = MoneyAdapter(it){ coin ->
+                if (twoPane) {
+                    moneyF.setData(coin)
+                } else {
+                    //TODO 10 launch activity to show further money details
+                }
+            }
+            setAdapter(moneyAdapter)
             recyclerview.adapter?.notifyDataSetChanged()
         }
         dataProvider.loadCountryList {
@@ -88,17 +81,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun setAdapter(data: ArrayList<Coin>) {
-        data.forEach { coin ->  Log.i(tag, "ejecutando setAdapter <E> ${coin._id}")}
+    private fun setAdapter(adapterForMoney: MoneyAdapter) {
         recyclerview.apply {
             setHasFixedSize(true)
-            adapter = MoneyAdapter(data) {
-                if (twoPane) {
-                    moneyF.setData(it)
-                } else {
-                    //TODO 10 hacer algo cool como abrir otra activity aqui y le pasamos la moneda
-                }
-            }
+            adapter = adapterForMoney
             layoutManager =
                 if (twoPane){
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
@@ -139,10 +125,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
 
             R.id.filter_AZ -> {
-                (recyclerview.adapter as MoneyAdapter).sortDataByName()
+                moneyAdapter.sortDataByName()
             }
             R.id.filter_ZA -> {
-                (recyclerview.adapter as MoneyAdapter).sortDataByName(false)
+                moneyAdapter.sortDataByName(false)
             }
 
             R.id.nav_share -> {
@@ -153,7 +139,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             else -> {
                 dataProvider.loadCountryList {
-                    (recyclerview.adapter as MoneyAdapter).filterByCountry(it[item.itemId].name)
+                    moneyAdapter.filterByCountry(it[item.itemId].name)
                 }
             }
         }

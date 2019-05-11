@@ -1,7 +1,6 @@
 package com.naldana.ejemplo10.database
 
 import android.content.Context
-import android.util.Log
 import com.naldana.ejemplo10.models.Coin
 import com.naldana.ejemplo10.models.Country
 

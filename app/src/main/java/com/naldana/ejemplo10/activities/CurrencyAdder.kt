@@ -1,4 +1,4 @@
-package com.naldana.ejemplo10
+package com.naldana.ejemplo10.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import com.naldana.ejemplo10.R
 import com.naldana.ejemplo10.models.Coin
 import com.naldana.ejemplo10.database.RealTimeDatabase
 
