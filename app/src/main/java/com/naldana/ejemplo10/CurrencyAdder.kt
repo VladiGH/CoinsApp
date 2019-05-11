@@ -20,11 +20,11 @@ class CurrencyAdder : AppCompatActivity() {
             database.insertData(gater()) { success, msm ->
                 Snackbar.make(
                     it,
-                    "${if (success) {
-                        getString(R.string.fb_ok)
-                    } else {
-                        getString(R.string.fb_error)
-                    }}: $msm",
+                    when {
+                        success -> getString(R.string.fb_ok)
+                        msm == "" -> getString(R.string.fb_error)
+                        else -> msm
+                    },
                     Snackbar.LENGTH_LONG
                 ).show()
             }
@@ -33,8 +33,8 @@ class CurrencyAdder : AppCompatActivity() {
 
     private fun gater(): Coin = Coin(
         null,
-        findViewById<EditText>(R.id.editText_name).text.toString(),
-        findViewById<EditText>(R.id.editText_country).text.toString(),
+        findViewById<EditText>(R.id.editText_name).text.toString().toLowerCase(),
+        findViewById<EditText>(R.id.editText_country).text.toString().toLowerCase(),
         findViewById<EditText>(R.id.editText_year).text.toString().toInt(),
         findViewById<CheckBox>(R.id.available).isChecked
     )

@@ -1,6 +1,5 @@
 package com.naldana.ejemplo10.database
 
-import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -9,16 +8,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.naldana.ejemplo10.models.Coin
-import com.naldana.ejemplo10.models.Country
 import java.lang.reflect.Method
 
 class DataProvider(appContext: Context) {
 
     private val tag = this@DataProvider::class.java.simpleName
     private val dbHelper = DatabaseSQL(appContext)
-    private val coinList = ArrayList<Coin>()
-    private val countryList = ArrayList<Country>()
     private val localDB = LocalDB(appContext)
     private val firebaseRTDB = FirebaseDatabase.getInstance()
 

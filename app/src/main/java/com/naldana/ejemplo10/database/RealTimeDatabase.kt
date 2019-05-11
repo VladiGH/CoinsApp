@@ -17,7 +17,7 @@ class RealTimeDatabase {
 
     fun <E : Any> insertData(dataObject: E, notify: (Boolean, String) -> Unit) {
         database.reference
-            .child("${dataObject::class.java.simpleName}s")
+            .child("${dataObject::class.java.simpleName}s".toLowerCase())
             .push().setValue(dataObject)
             .addOnSuccessListener {
                 notify(true, dataObject::class.java.simpleName)
