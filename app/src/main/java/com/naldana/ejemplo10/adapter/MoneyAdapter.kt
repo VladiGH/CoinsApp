@@ -43,4 +43,12 @@ class MoneyAdapter(
         notifyDataSetChanged()
     }
 
+    fun filterByCountry(countryName: String){
+        val new = coins.filter {
+            it.country == countryName
+        }
+        coins = new
+        notifyDataSetChanged()
+    }
+
 }

@@ -22,6 +22,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.AnimationSet
 import android.view.animation.RotateAnimation
 import com.naldana.ejemplo10.database.LocalDB
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -76,9 +77,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (fragment_content != null) {
             twoPane = true
         }
-        dataProvider.pullData(Coin::class.java){
+        dataProvider.loadCoinList{
             setAdapter(it)
             recyclerview.adapter?.notifyDataSetChanged()
+        }
+        dataProvider.loadCountryList {
+            it.forEach{country ->
+                nav_view.menu.add(R.id.filter, it.indexOf(country), 0, country.name)
+            }
         }
     }
 
@@ -131,24 +137,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
-            R.id.filter_region -> {
 
-            }
             R.id.filter_AZ -> {
                 (recyclerview.adapter as MoneyAdapter).sortDataByName()
             }
             R.id.filter_ZA -> {
                 (recyclerview.adapter as MoneyAdapter).sortDataByName(false)
             }
-            R.id.equivalence -> {
-                Log.i(tag, "equivalence")
-            }
+
             R.id.nav_share -> {
 
             }
             R.id.nav_send -> {
 
+            }
+            else -> {
+                dataProvider.loadCountryList {
+                    (recyclerview.adapter as MoneyAdapter).filterByCountry(it[item.itemId].name)
+                }
             }
         }
 

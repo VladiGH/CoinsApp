@@ -13,7 +13,7 @@ class LocalDB(appContext: Context) {
         dbHelper.close()
     }
 
-    private fun writeToLocalDB(data: ArrayList<Coin>): Boolean {
+    fun writeToLocalDB(data: ArrayList<Coin>): Boolean {
         val db = dbHelper.writableDatabase
         val listBase = readMonedas()
         data.forEach {
@@ -63,7 +63,7 @@ class LocalDB(appContext: Context) {
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE)) == 1
                 )
-                Log.i("MainActivity", "From local database ${coin.name} ${coin.year}")
+                Log.i("MainActivity", "From local firebaseRTDB ${coin.name} ${coin.year}")
                 lista.add(coin)
             }
         }

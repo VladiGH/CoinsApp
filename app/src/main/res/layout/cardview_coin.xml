@@ -15,7 +15,7 @@
             android:id="@+id/movie_image_cv"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_launcher_background" />
 
 
@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/movie_image_cv"
-
             android:orientation="vertical">
 
             <TextView
