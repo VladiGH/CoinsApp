@@ -41,6 +41,7 @@ class DatabaseSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
         onCreate(db) // Se vuelve a crear la base.
     }
 
+
     // TODO(11) Se definen en constantes, el nombre de la base de datos y la versión
     companion object {
         const val DATABASE_NAME = "miprimerabase.db"
