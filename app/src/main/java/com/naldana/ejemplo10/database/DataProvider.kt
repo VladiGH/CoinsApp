@@ -16,10 +16,7 @@ import java.lang.reflect.Method
 class DataProvider(appContext: Context) {
 
     private val tag = this@DataProvider::class.java.simpleName
-    private val dataProvider = RealTimeDatabase()
     private val dbHelper = DatabaseSQL(appContext)
-    private val coinList = ArrayList<Coin>()
-    private val countryList = ArrayList<Country>()
     private val firebaseRTDB = FirebaseDatabase.getInstance()
 
 
@@ -96,7 +93,6 @@ class DataProvider(appContext: Context) {
                 lista.add(coin)
             }
         }
-
         return lista
     }
 

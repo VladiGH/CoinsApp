@@ -25,4 +25,6 @@
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="send">Send</string>
+    <string name="fb_error">Failure on insert: unknown error</string>
+    <string name="fb_ok">object inserted</string>
 </resources>
