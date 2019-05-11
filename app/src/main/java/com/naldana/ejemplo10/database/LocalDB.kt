@@ -15,9 +15,10 @@ class LocalDB(appContext: Context) {
 
     fun writeToLocalDB(data: ArrayList<Coin>): Boolean {
         val db = dbHelper.writableDatabase
-        val listBase = readMonedas()
+        val listBase = readMoney()
         data.forEach {
             val values = ContentValues().apply {
+                put(DatabaseContract.CoinEntry.COLUMN_ID, it._id)
                 put(DatabaseContract.CoinEntry.COLUMN_NAME, it.name)
                 put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, it.country)
                 put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
@@ -26,14 +27,17 @@ class LocalDB(appContext: Context) {
             if (!listBase.contains(it)) {
                 val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
                 return newRowId == -1L
+            } else{
+                updateCoin(it)
             }
         }
         return true
     }
 
-    private fun readMonedas(): ArrayList<Coin> {
+    fun readMoney(): ArrayList<Coin> {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(
+            DatabaseContract.CoinEntry.COLUMN_ID,
             DatabaseContract.CoinEntry.COLUMN_NAME,
             DatabaseContract.CoinEntry.COLUMN_COUNTRY,
             DatabaseContract.CoinEntry.COLUMN_YEAR,
@@ -51,35 +55,37 @@ class LocalDB(appContext: Context) {
             null, // do not filter by row
             sortOrder // sort order
         )
-
-        val lista = ArrayList<Coin>()
-
+        val list = ArrayList<Coin>()
         with(cursor) {
             while (moveToNext()) {
                 val coin = Coin(
-                    null,
+                    getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_ID)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_NAME)),
                     getString(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_COUNTRY)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_YEAR)),
                     getInt(getColumnIndexOrThrow(DatabaseContract.CoinEntry.COLUMN_AVAILABLE)) == 1
                 )
-                Log.i("MainActivity", "From local firebaseRTDB ${coin.name} ${coin.year}")
-                lista.add(coin)
+                Log.i("LocalDB", "From local datbase ${coin._id} ${coin.name} ${coin.year}")
+                list.add(coin)
             }
         }
-
-        return lista
+        return list
     }
 
-    fun updateCoin(coin: Coin, name: String, country: String, year: Int, available: Boolean){
-        val idCoin = coin._id
+    fun updateCoin(coin: Coin) {
         val db = dbHelper.writableDatabase
         val values = ContentValues()
-        values.put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, country)
-        values.put(DatabaseContract.CoinEntry.COLUMN_YEAR,year)
-        values.put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, available)
+        values.put(DatabaseContract.CoinEntry.COLUMN_NAME, coin.name)
+        values.put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, coin.country)
+        values.put(DatabaseContract.CoinEntry.COLUMN_YEAR, coin.year)
+        values.put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, coin.available)
 
-        db.update(DatabaseContract.CoinEntry.TABLE_NAME, values, DatabaseContract.CoinEntry.COLUMN_NAME+ "="+ name, null)
+        db.update(
+            DatabaseContract.CoinEntry.TABLE_NAME,
+            values,
+            DatabaseContract.CoinEntry.COLUMN_ID + "=" + coin._id,
+            null
+        )
 
     }
 

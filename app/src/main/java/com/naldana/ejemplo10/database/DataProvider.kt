@@ -12,8 +12,12 @@ class DataProvider(appContext: Context) {
     private val localData = LocalDB(appContext)
 
 
-    fun loadCoinList(callBack: (ArrayList<Coin>) -> Unit){
-        realtimeData.pullData(Coin::class.java){
+    fun loadCoinList() : ArrayList<Coin>{
+       return localData.readMoney()
+    }
+
+    fun syncCoinList(callBack: (ArrayList<Coin>) -> Unit){
+        realtimeData.pullData(Coin::class.java) {
             localData.writeToLocalDB(it)
             callBack(it)
         }
@@ -24,6 +28,10 @@ class DataProvider(appContext: Context) {
             //Todo localData.insert(Arralists<Country>)
             callBack(it)
         }
+    }
+
+    fun terminateProvider(){
+        localData.closeDb()
     }
 
 

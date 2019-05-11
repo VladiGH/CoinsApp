@@ -16,7 +16,6 @@ import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import com.naldana.ejemplo10.activities.CurrencyAdder
-import com.naldana.ejemplo10.database.LocalDB
 import com.naldana.ejemplo10.utilities.ViewAnimator
 
 
@@ -24,7 +23,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     //private val tag = this@MainActivity::class.java.simpleName
     private val dataProvider = DataProvider(this@MainActivity)
-    private val localDB = LocalDB(this@MainActivity)
     private var twoPane = false
     private val animator = ViewAnimator()
     private lateinit var moneyF: MoneyFragment
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestroy() {
         super.onDestroy()
-        localDB.closeDb()
+        dataProvider.terminateProvider()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +40,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         fab.setOnClickListener {
             it.startAnimation(animator.getRotationAnimation())
-            recyclerview.adapter?.notifyDataSetChanged()
+            dataProvider.syncCoinList{ dataCoin ->
+                moneyAdapter.updateCurrentCoin(dataCoin)
+                recyclerview.adapter?.notifyDataSetChanged()
+            }
         }
         addCoin.setOnClickListener {
             val intent = Intent(this@MainActivity, CurrencyAdder::class.java)
@@ -63,19 +64,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             twoPane = true
             moneyF = MoneyFragment()
         }
-        dataProvider.loadCoinList{
-            moneyAdapter = MoneyAdapter(it){ coin ->
-                if (twoPane) {
-                    moneyF.setData(coin)
-                } else {
-                    //TODO 10 launch activity to show further money details
-                }
+        moneyAdapter = MoneyAdapter(dataProvider.loadCoinList()) { coin ->
+            if (twoPane) {
+                moneyF.setData(coin)
+            } else {
+                //TODO 10 launch activity to show further money details
             }
             setAdapter(moneyAdapter)
-            recyclerview.adapter?.notifyDataSetChanged()
-        }
+        }.apply {notifyDataSetChanged()}
         dataProvider.loadCountryList {
-            it.forEach{country ->
+            it.forEach { country ->
                 nav_view.menu.add(R.id.filter, it.indexOf(country), 0, country.name)
             }
         }
@@ -86,11 +84,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setHasFixedSize(true)
             adapter = adapterForMoney
             layoutManager =
-                if (twoPane){
+                if (twoPane) {
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
                     GridLayoutManager(this.context, 1)
-                }
-                else GridLayoutManager(this.context, 2)
+                } else GridLayoutManager(this.context, 2)
         }
     }
 

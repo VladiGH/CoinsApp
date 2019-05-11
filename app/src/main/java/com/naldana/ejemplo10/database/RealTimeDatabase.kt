@@ -26,7 +26,6 @@ class RealTimeDatabase {
     }
 
     fun <E : Any> pullData(pullType: Class<E>, callBack: (ArrayList<E>) -> Unit) {
-        Log.i(tag, "The name of node is ${pullType.simpleName}")
         val dataArray = ArrayList<E>()
         fireBase.getReference("${pullType.simpleName}s".toLowerCase()).apply {
             addListenerForSingleValueEvent(

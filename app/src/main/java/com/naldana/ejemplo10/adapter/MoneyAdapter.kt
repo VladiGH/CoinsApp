@@ -9,9 +9,11 @@ import com.naldana.ejemplo10.models.Coin
 import kotlinx.android.synthetic.main.cardview_coin.view.*
 
 class MoneyAdapter(
-    var coins: List<Coin>,
-    val clickListener: (Coin) -> Unit
+    private var coins: List<Coin>,
+    private val clickListener: (Coin) -> Unit
 ) : RecyclerView.Adapter<MoneyAdapter.ViewHolder>() {
+
+    var coinCurrentList = coins
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Coin, clickListener: (Coin) -> Unit) = with(itemView) {
@@ -27,15 +29,15 @@ class MoneyAdapter(
     }
 
     override fun getItemCount(): Int {
-        return coins.size
+        return coinCurrentList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(coins[position], clickListener)
+        return holder.bind(coinCurrentList[position], clickListener)
     }
 
     fun sortDataByName(upToDown: Boolean = true){
-        coins = if(upToDown){
+        coinCurrentList = if(upToDown){
             coins.sortedBy{it.name.toLowerCase()}
         } else {
             coins.sortedByDescending{it.name.toLowerCase()}
@@ -44,11 +46,15 @@ class MoneyAdapter(
     }
 
     fun filterByCountry(countryName: String){
-        val new = coins.filter {
+        coinCurrentList = coins.filter {
             it.country == countryName
         }
-        coins = new
         notifyDataSetChanged()
     }
 
+    fun updateCurrentCoin(newData: ArrayList<Coin>){
+        coinCurrentList = newData
+        coins = newData
+        notifyDataSetChanged()
+    }
 }

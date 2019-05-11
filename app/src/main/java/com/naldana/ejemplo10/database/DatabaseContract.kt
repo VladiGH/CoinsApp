@@ -14,9 +14,15 @@ object DatabaseContract {
     object CoinEntry : BaseColumns {
         const val TABLE_NAME = "coin"
         const val COLUMN_ID = "id"
-        const val COLUMN_NAME = "username"
-        const val COLUMN_COUNTRY = "email"
+        const val COLUMN_NAME = "name"
+        const val COLUMN_COUNTRY = "country"
         const val COLUMN_YEAR = "year"
         const val COLUMN_AVAILABLE = "available"
+    }
+
+    object CountryEntry : BaseColumns {
+        const val TABLE_NAME = "country"
+        const val COLUMN_ID = "id"
+        const val COLUMN_NAME = "name"
     }
 }
