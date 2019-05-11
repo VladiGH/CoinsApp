@@ -21,6 +21,7 @@ import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.AnimationSet
 import android.view.animation.RotateAnimation
+import com.naldana.ejemplo10.database.LocalDB
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,11 +29,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val tag = this@MainActivity::class.java.simpleName
     private val moneyF = MoneyFragment()
     private val dataProvider = DataProvider(this@MainActivity)
+    private val localDB = LocalDB(this@MainActivity)
     private var twoPane = false
 
     override fun onDestroy() {
         super.onDestroy()
-        dataProvider.closeDb()
+        localDB.closeDb()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
