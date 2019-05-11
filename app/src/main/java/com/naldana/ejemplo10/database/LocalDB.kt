@@ -71,4 +71,16 @@ class LocalDB(appContext: Context) {
         return lista
     }
 
+    fun updateCoin(coin: Coin, name: String, country: String, year: Int, available: Boolean){
+        val idCoin = coin._id
+        val db = dbHelper.writableDatabase
+        val values = ContentValues()
+        values.put(DatabaseContract.CoinEntry.COLUMN_COUNTRY, country)
+        values.put(DatabaseContract.CoinEntry.COLUMN_YEAR,year)
+        values.put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, available)
+
+        db.update(DatabaseContract.CoinEntry.TABLE_NAME, values, DatabaseContract.CoinEntry.COLUMN_NAME+ "="+ name, null)
+
+    }
+
 }
