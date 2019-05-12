@@ -78,9 +78,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 moneyF.setData(coin)
             } else {
                 //TODO Raul launch MoneyActivity to show further money details
-
-                var coinBundle = Bundle()
-                coinBundle.putParcelable("coin",coin)
+                val coinBundle = Bundle().apply {
+                    putParcelable("coin", coin)
+                }
                 val intent= Intent(this@MainActivity, DetailMoney::class.java)
                 intent.putExtras(coinBundle)
                 startActivity(intent)

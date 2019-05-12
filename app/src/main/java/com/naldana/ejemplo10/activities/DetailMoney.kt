@@ -9,23 +9,15 @@ import com.naldana.ejemplo10.models.Coin
 
 class DetailMoney : AppCompatActivity() {
 
+    private val moneyFragment = MoneyFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_money)
-
-        var coinInfo: Coin = intent.extras.getParcelable("coin")
-
-        initActivity(coinInfo)
+        val coinInfo = intent.extras?.getParcelable<Coin>("coin")
+        supportFragmentManager.beginTransaction().replace(R.id.content_fragment2, moneyFragment).commit()
+        moneyFragment.setData(coinInfo?:Coin())
     }
 
-    fun initActivity(coin: Coin) {
-        val moneyFragment = MoneyFragment()
-        moneyFragment.setData(coin)
 
-        changeFragment(R.id.content_fragment,moneyFragment)
-    }
-
-    private fun changeFragment(id: Int, frag: Fragment) {
-        supportFragmentManager.beginTransaction().replace(id, frag).commit()
-    }
 }
