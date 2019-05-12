@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.naldana.ejemplo10.models.Coin
+import com.naldana.ejemplo10.models.Country
 
 class LocalDB(appContext: Context) {
 
@@ -29,6 +30,8 @@ class LocalDB(appContext: Context) {
                 val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
             } else{
+                updateCoin(it)
+                dataStatus.add(updateCoin(it))
                 // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
         }
@@ -73,7 +76,61 @@ class LocalDB(appContext: Context) {
         return list
     }
 
-    fun updateCoin(coin: Coin) {
+    fun insertToLocalDB(country: ArrayList<Country>){
+        val db = dbHelper.writableDatabase
+        val listBase = readCountries()
+        val dataStatus = java.util.ArrayList<Boolean>()
+
+        country.forEach{
+            val values = ContentValues().apply {
+                put(DatabaseContract.CountryEntry.COLUMN_ID, it._id)
+                put(DatabaseContract.CountryEntry.COLUMN_NAME, it.name)
+            }
+            if (!listBase.contains(it)) {
+                val newRowId = db?.insert(DatabaseContract.CountryEntry.TABLE_NAME, null, values)
+                dataStatus.add(newRowId != -1L)
+            } else{
+                //updateCountry(country)
+
+                // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
+            }
+        }
+
+    }
+    fun readCountries(): ArrayList<Country> {
+        val db = dbHelper.readableDatabase
+        val projection = arrayOf(
+            DatabaseContract.CountryEntry.COLUMN_ID,
+            DatabaseContract.CountryEntry.COLUMN_NAME
+        )
+
+        val sortOrder = "${DatabaseContract.CountryEntry.COLUMN_NAME} DESC"
+
+        val cursor = db.query(
+            DatabaseContract.CountryEntry.TABLE_NAME, // nombre de la tabla
+            projection, // columnas que se devolverán
+            null, // Columns where clausule
+            null, // values Where clausule
+            null, // Do not group rows
+            null, // do not filter by row
+            sortOrder // sort order
+        )
+        val list = ArrayList<Country>()
+        with(cursor) {
+            while (moveToNext()) {
+                val country = Country(
+                    getString(getColumnIndexOrThrow(DatabaseContract.CountryEntry.COLUMN_ID)),
+                    getString(getColumnIndexOrThrow(DatabaseContract.CountryEntry.COLUMN_NAME))
+                )
+                Log.i("LocalDB", "From local datbase ${country._id} ${country.name}")
+                list.add(country)
+            }
+        }
+        return list
+    }
+
+
+    fun updateCoin(coin: Coin): Boolean {
         val db = dbHelper.writableDatabase
         val values = ContentValues()
         values.put(DatabaseContract.CoinEntry.COLUMN_NAME, coin.name)
@@ -87,7 +144,19 @@ class LocalDB(appContext: Context) {
             DatabaseContract.CoinEntry.COLUMN_ID + "=" + coin._id,
             null
         )
-
+        return true
     }
+    fun updateCountry(country: Country): Boolean{
+        val db = dbHelper.writableDatabase
+        val values = ContentValues()
+        values.put(DatabaseContract.CountryEntry.COLUMN_NAME, country.name)
 
+        db.update(
+            DatabaseContract.CountryEntry.TABLE_NAME,
+            values,
+            DatabaseContract.CountryEntry.COLUMN_ID + "=" + country._id,
+            null
+        )
+        return true
+    }
 }
