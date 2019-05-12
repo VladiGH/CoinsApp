@@ -26,6 +26,7 @@ class DataProvider(appContext: Context) {
     fun loadCountryList(callBack: (ArrayList<Country>) -> Unit){
         realtimeData.pullData(Country::class.java){
             //Todo vlady localData.insert(Arralists<Country>)
+
             callBack(it)
         }
     }
