@@ -30,8 +30,8 @@ class LocalDB(appContext: Context) {
                 val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
             } else{
-                updateCoin(it)
-                dataStatus.add(updateCoin(it))
+              //  updateCoin(it)
+                //dataStatus.add(updateCoin(it))
                 // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
         }
