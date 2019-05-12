@@ -17,6 +17,7 @@ import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import com.naldana.ejemplo10.activities.CurrencyAdder
+import com.naldana.ejemplo10.activities.DetailMoney
 import com.naldana.ejemplo10.utilities.ViewAnimator
 
 
@@ -77,6 +78,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 moneyF.setData(coin)
             } else {
                 //TODO Raul launch MoneyActivity to show further money details
+
+                var coinBundle = Bundle()
+                coinBundle.putParcelable("coin",coin)
+                val intent= Intent(this@MainActivity, DetailMoney::class.java)
+                intent.putExtras(coinBundle)
+                startActivity(intent)
             }
         }
         setAdapter(moneyAdapter)
