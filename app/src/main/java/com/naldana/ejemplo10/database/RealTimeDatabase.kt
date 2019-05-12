@@ -44,7 +44,7 @@ class RealTimeDatabase {
                                     dataArray.add(element)
                                 }
                             } catch (e: NoSuchMethodException) {
-                                Log.i(tag, "The object ${pullType.simpleName} does not have set_id(String) method")
+                                Log.e(tag, "The object ${pullType.simpleName} does not have set_id(String) method")
                             }
                         }
                         callBack(dataArray)

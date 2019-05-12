@@ -3,6 +3,7 @@ package com.naldana.ejemplo10
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -21,7 +22,7 @@ import com.naldana.ejemplo10.utilities.ViewAnimator
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    //private val tag = this@MainActivity::class.java.simpleName
+    private val tag = this@MainActivity::class.java.simpleName
     private val dataProvider = DataProvider(this@MainActivity)
     private var twoPane = false
     private val animator = ViewAnimator()
@@ -40,16 +41,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         fab.setOnClickListener {
             it.startAnimation(animator.getRotationAnimation())
-            dataProvider.syncCoinList{ dataCoin ->
-                moneyAdapter.updateCurrentCoin(dataCoin)
-                recyclerview.adapter?.notifyDataSetChanged()
+            dataProvider.syncCoinList { updatedCoin ->
+                var updateErrors = 0
+                updatedCoin.forEach { success ->
+                    if(success) updateErrors++
+                }
+                moneyAdapter.updateCurrentCoin(dataProvider.loadCoinList())
+                Snackbar.make(it, getString(R.string.updated_of)+": $updateErrors of ${moneyAdapter.getTrueItemCount()}", Snackbar.LENGTH_LONG).show()
+            }
+            dataProvider.syncCountryList {
+                //Todo Jorge insertar paises nuevos en el menu lateral
             }
         }
         addCoin.setOnClickListener {
             val intent = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intent)
         }
-
+        //TODO Jorge hacer actividad para insertar paises y agregar un boton para acceder a ella
         val toggle = ActionBarDrawerToggle(
             this@MainActivity,
             drawer_layout,
@@ -68,10 +76,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (twoPane) {
                 moneyF.setData(coin)
             } else {
-                //TODO 10 launch activity to show further money details
+                //TODO Raul launch MoneyActivity to show further money details
             }
-            setAdapter(moneyAdapter)
-        }.apply {notifyDataSetChanged()}
+        }
+        setAdapter(moneyAdapter)
         dataProvider.loadCountryList {
             it.forEach { country ->
                 nav_view.menu.add(R.id.filter, it.indexOf(country), 0, country.name)
@@ -89,12 +97,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     GridLayoutManager(this.context, 1)
                 } else GridLayoutManager(this.context, 2)
         }
+        adapterForMoney.notifyDataSetChanged()
     }
 
-
-    // TODO (16) Para poder tener un comportamiento Predecible
-    // TODO (16.1) Cuando se presione el boton back y el menu este abierto cerralo
-    // TODO (16.2) De lo contrario hacer la accion predeterminada
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
@@ -103,20 +108,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    // TODO (17) LLena el menu que esta en la barra. El de tres puntos a la derecha
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
-    // TODO (18) Atiende el click del menu de la barra
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_settings -> true
         else -> super.onOptionsItemSelected(item)
     }
 
-    // TODO (14.2) Funcion que recibe el ID del elemento tocado
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
@@ -141,7 +143,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        // TODO (15) Cuando se da click a un opcion del menu se cierra de manera automatica
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }

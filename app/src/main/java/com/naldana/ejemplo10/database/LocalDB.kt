@@ -13,9 +13,10 @@ class LocalDB(appContext: Context) {
         dbHelper.close()
     }
 
-    fun writeToLocalDB(data: ArrayList<Coin>): Boolean {
+    fun writeToLocalDB(data: ArrayList<Coin>): ArrayList<Boolean> {
         val db = dbHelper.writableDatabase
         val listBase = readMoney()
+        val dataStatus = java.util.ArrayList<Boolean>()
         data.forEach {
             val values = ContentValues().apply {
                 put(DatabaseContract.CoinEntry.COLUMN_ID, it._id)
@@ -26,12 +27,12 @@ class LocalDB(appContext: Context) {
             }
             if (!listBase.contains(it)) {
                 val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
-                return newRowId == -1L
+                dataStatus.add(newRowId != -1L)
             } else{
-                updateCoin(it)
+                // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
         }
-        return true
+        return dataStatus
     }
 
     fun readMoney(): ArrayList<Coin> {

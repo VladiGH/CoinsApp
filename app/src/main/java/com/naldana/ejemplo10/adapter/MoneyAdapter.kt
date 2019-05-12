@@ -57,4 +57,6 @@ class MoneyAdapter(
         coins = newData
         notifyDataSetChanged()
     }
+
+    fun getTrueItemCount(): Int = coins.size
 }

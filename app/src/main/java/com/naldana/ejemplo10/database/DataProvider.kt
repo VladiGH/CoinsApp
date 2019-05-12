@@ -1,6 +1,7 @@
 package com.naldana.ejemplo10.database
 
 import android.content.Context
+import android.util.Log
 import com.naldana.ejemplo10.models.Coin
 import com.naldana.ejemplo10.models.Country
 
@@ -16,17 +17,23 @@ class DataProvider(appContext: Context) {
        return localData.readMoney()
     }
 
-    fun syncCoinList(callBack: (ArrayList<Coin>) -> Unit){
+    fun syncCoinList(callBack: (ArrayList<Boolean>) -> Unit){
         realtimeData.pullData(Coin::class.java) {
-            localData.writeToLocalDB(it)
-            callBack(it)
+            callBack(localData.writeToLocalDB(it))
         }
     }
 
     fun loadCountryList(callBack: (ArrayList<Country>) -> Unit){
         realtimeData.pullData(Country::class.java){
-            //Todo localData.insert(Arralists<Country>)
+            //Todo vlady localData.insert(Arralists<Country>)
             callBack(it)
+        }
+    }
+
+    fun syncCountryList(callBack: (ArrayList<Boolean>) -> Unit){
+        realtimeData.pullData(Country::class.java) {
+            //Todo Raul crear metodo para guaradar paises en local DB
+            //callBack(localData.writeToLocalDB(it))
         }
     }
 
