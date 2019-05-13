@@ -153,5 +153,17 @@ class LocalDB(appContext: Context) {
         ) != -1
     }
 
-   //Wait
+    fun updateCountry(country: Country): Boolean {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues()
+        values.put(DatabaseContract.CountryEntry.COLUMN_NAME, country.name)
+
+        db.update(
+            DatabaseContract.CountryEntry.TABLE_NAME,
+            values,
+            DatabaseContract.CountryEntry.COLUMN_ID + "=" + country._id,
+            null
+        )
+        return true
+    }
 }
