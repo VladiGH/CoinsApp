@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             dataProvider.syncCountryList {
                 //Todo Jorge insertar paises nuevos en el menu lateral
+
             }
         }
         addCoin.setOnClickListener {
