@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities.CurrencyAdder">
+
+    <TextView
+            android:text="@string/Country"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:id="@+id/text_name"
+            android:layout_weight="1"/>
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/country_name"
+            android:ems="10"
+            android:id="@+id/editText_name"
+            android:layout_weight="1"/>
+
+    <TextView
+            android:text="@string/area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_country"
+            android:layout_weight="1"/>
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/area2"
+            android:ems="10"
+            android:id="@+id/editText_country"
+            android:layout_weight="1"/>
+
+
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:id="@+id/submit1"/>
+
+
+</LinearLayout>

@@ -18,7 +18,6 @@
     <string name="moneda">Moneda</string>
     <string name="anio">anio</string>
     <string name="order">Order by</string>
-    <string name="region">Region</string>
     <string name="alphabetic_decedent">Alphabetic decedent</string>
     <string name="alphabetic_ascendant">Alphabetic Ascendant</string>
     <string name="equivalence">Equivalence</string>
@@ -28,4 +27,10 @@
     <string name="fb_error">Unknown error with Database</string>
     <string name="fb_ok">object inserted</string>
     <string name="updated_of">object added</string>
+    <string name="Country">Name</string>
+    <string name="name_country">Name Country</string>
+    <string name="country_s_name">Country\'s name</string>
+    <string name="country_name">Country Name</string>
+    <string name="area">Area</string>
+    <string name="area2">Area</string>
 </resources>

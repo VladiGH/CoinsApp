@@ -18,6 +18,7 @@ import com.naldana.ejemplo10.adapter.MoneyAdapter
 import com.naldana.ejemplo10.database.DataProvider
 import com.naldana.ejemplo10.fragmentos.MoneyFragment
 import com.naldana.ejemplo10.activities.CurrencyAdder
+import com.naldana.ejemplo10.activities.CurrencyAdderCountry
 import com.naldana.ejemplo10.activities.DetailMoney
 import com.naldana.ejemplo10.utilities.ViewAnimator
 
@@ -63,6 +64,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         addCoin.setOnClickListener {
             val intent = Intent(this@MainActivity, CurrencyAdder::class.java)
             startActivity(intent)
+        }
+        //Rewrite
+        addCountry.setOnClickListener{
+            val intent = Intent(this@MainActivity, CurrencyAdderCountry::class.java)
+            startActivity(intent)
+
         }
         //TODO Jorge hacer actividad para insertar paises y agregar un boton para acceder a ella
         val toggle = ActionBarDrawerToggle(
