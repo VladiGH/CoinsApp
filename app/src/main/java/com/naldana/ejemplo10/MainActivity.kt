@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -75,7 +76,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         moneyAdapter = MoneyAdapter(dataProvider.loadCoinList()) { coin ->
             if (twoPane) {
-                moneyF.setData(coin)
+                val newLandMoneyFragmentMain = MoneyFragment.newInstance(coin)
+                changeFragment(R.id.fragment_content,newLandMoneyFragmentMain)
             } else {
                 //TODO Raul launch MoneyActivity to show further money details
                 val coinBundle = Bundle().apply {
@@ -93,6 +95,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+    private fun changeFragment(id: Int, frag: Fragment){ supportFragmentManager.beginTransaction().replace(id, frag).commit() }
 
     private fun setAdapter(adapterForMoney: MoneyAdapter) {
         recyclerview.apply {
