@@ -17,6 +17,7 @@ class MoneyFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         fragmentViewRef = inflater.inflate(R.layout.money_detail, container, false)
+        setData(coin)
         return fragmentViewRef
     }
 
