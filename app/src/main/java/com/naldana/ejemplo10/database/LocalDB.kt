@@ -26,17 +26,23 @@ class LocalDB(appContext: Context) {
                 put(DatabaseContract.CoinEntry.COLUMN_YEAR, it.year)
                 put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, if (it.available) 1 else 0)
             }
-            if (!listBase.contains(it)) {
+            var isAlreadyIn = false
+            listBase.forEach { elem ->
+                if (elem._id == it._id) {
+                    isAlreadyIn = true
+                    Log.d("DatabaseUPdate", "${it.name} is already on db")
+                }
+            }
+            if(isAlreadyIn){
+                updateCoin(it)
+            } else {
                 val newRowId = db?.insert(DatabaseContract.CoinEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
-            } else{
-              //  updateCoin(it)
-                //dataStatus.add(updateCoin(it))
-                // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
         }
         return dataStatus
     }
+
 
     fun readMoney(): ArrayList<Coin> {
         val db = dbHelper.readableDatabase
@@ -76,12 +82,12 @@ class LocalDB(appContext: Context) {
         return list
     }
 
-    fun insertToLocalDB(country: ArrayList<Country>){
+    fun insertToLocalDB(country: ArrayList<Country>) {
         val db = dbHelper.writableDatabase
         val listBase = readCountries()
         val dataStatus = java.util.ArrayList<Boolean>()
 
-        country.forEach{
+        country.forEach {
             val values = ContentValues().apply {
                 put(DatabaseContract.CountryEntry.COLUMN_ID, it._id)
                 put(DatabaseContract.CountryEntry.COLUMN_NAME, it.name)
@@ -89,7 +95,7 @@ class LocalDB(appContext: Context) {
             if (!listBase.contains(it)) {
                 val newRowId = db?.insert(DatabaseContract.CountryEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
-            } else{
+            } else {
                 //updateCountry(country)
 
                 // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
@@ -97,6 +103,7 @@ class LocalDB(appContext: Context) {
         }
 
     }
+
     fun readCountries(): ArrayList<Country> {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(
@@ -138,15 +145,15 @@ class LocalDB(appContext: Context) {
         values.put(DatabaseContract.CoinEntry.COLUMN_YEAR, coin.year)
         values.put(DatabaseContract.CoinEntry.COLUMN_AVAILABLE, coin.available)
 
-        db.update(
+        return db.update(
             DatabaseContract.CoinEntry.TABLE_NAME,
             values,
-            DatabaseContract.CoinEntry.COLUMN_ID + "=" + coin._id,
+            "${DatabaseContract.CoinEntry.COLUMN_ID} = \"${coin._id}\"",
             null
-        )
-        return true
+        ) != -1
     }
-    fun updateCountry(country: Country): Boolean{
+
+    fun updateCountry(country: Country): Boolean {
         val db = dbHelper.writableDatabase
         val values = ContentValues()
         values.put(DatabaseContract.CountryEntry.COLUMN_NAME, country.name)

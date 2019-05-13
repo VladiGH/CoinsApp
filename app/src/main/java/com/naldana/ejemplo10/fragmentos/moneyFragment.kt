@@ -17,8 +17,6 @@ class MoneyFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         fragmentViewRef = inflater.inflate(R.layout.money_detail, container, false)
-        //fragmentViewRef.findViewById<TextView>(R.id.year_text).text = "Year: currentCoin.year.toString()"
-        setData(coin)
         return fragmentViewRef
     }
 
