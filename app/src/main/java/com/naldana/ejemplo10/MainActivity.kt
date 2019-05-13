@@ -46,10 +46,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             dataProvider.syncCoinList { updatedCoin ->
                 var updateErrors = 0
                 updatedCoin.forEach { success ->
-                    if(success) updateErrors++
+                    if (success) updateErrors++
                 }
                 moneyAdapter.updateCurrentCoin(dataProvider.loadCoinList())
-                Snackbar.make(it, getString(R.string.updated_of)+": $updateErrors of ${moneyAdapter.getTrueItemCount()}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    it,
+                    getString(R.string.updated_of) + ": $updateErrors of ${moneyAdapter.getTrueItemCount()}",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
             dataProvider.syncCountryList {
                 //Todo Jorge insertar paises nuevos en el menu lateral
@@ -83,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val coinBundle = Bundle().apply {
                     putParcelable("coin", coin)
                 }
-                val intent= Intent(this@MainActivity, DetailMoney::class.java)
+                val intent = Intent(this@MainActivity, DetailMoney::class.java)
                 intent.putExtras(coinBundle)
                 startActivity(intent)
             }
@@ -102,11 +106,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         recyclerview.apply {
             setHasFixedSize(true)
             adapter = adapterForMoney
-            layoutManager =
-                if (twoPane) {
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
-                    GridLayoutManager(this.context, 1)
-                } else GridLayoutManager(this.context, 2)
+            if (twoPane) {
+                layoutManager = GridLayoutManager(this.context, 1)
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_content, moneyF).commit()
+            } else {
+                layoutManager = GridLayoutManager(this.context, 2)
+            }
         }
         adapterForMoney.notifyDataSetChanged()
     }

@@ -27,5 +27,5 @@
     <string name="send">Send</string>
     <string name="fb_error">Unknown error with Database</string>
     <string name="fb_ok">object inserted</string>
-    <string name="updated_of">object updated</string>
+    <string name="updated_of">object added</string>
 </resources>
