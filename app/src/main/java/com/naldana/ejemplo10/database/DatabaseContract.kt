@@ -18,4 +18,10 @@ object DatabaseContract {
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"
     }
+
+    object CxC: BaseColumns {
+        const val TABLE_NAME = "cxc"
+        const val FKPK_COLUMN_COUNTRY_ID = "countryID"
+        const val  FKPK_COLUMN_COIN_ID = "coinID"
+    }
 }

@@ -96,7 +96,7 @@ class LocalDB(appContext: Context) {
                 val newRowId = db?.insert(DatabaseContract.CountryEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
             } else {
-                //updateCountry(country)
+                updateCountry(it)
 
                 // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
@@ -158,12 +158,27 @@ class LocalDB(appContext: Context) {
         val values = ContentValues()
         values.put(DatabaseContract.CountryEntry.COLUMN_NAME, country.name)
 
-        db.update(
+        val coins: ArrayList<Coin> = ArrayList()
+
+        //val readMoney = readMoney()
+
+        for((pos, i) in coins.withIndex()){
+            if(i.country == country.name){
+                coins.add(coins[pos])
+            }
+        }
+
+        Log.d("pruebaUpdate","equisde")
+
+        return db.update(
             DatabaseContract.CountryEntry.TABLE_NAME,
             values,
-            DatabaseContract.CountryEntry.COLUMN_ID + "=" + country._id,
+            "${DatabaseContract.CountryEntry.COLUMN_ID} = \"${country._id}\"",
             null
-        )
-        return true
+        ) != -1
+    }
+
+    fun updateCxC(){
+
     }
 }
