@@ -30,14 +30,11 @@ class CurrencyAdderCountry : AppCompatActivity() {
             }
         }
     }
-    private fun gatter(): Country = Country (
-        null,
-        findViewById<EditText>(R.id.editText_name1).text.toString().toLowerCase(),
-        findViewById<EditText>(R.id.editText_country1).text.toString().toLowerCase()
-    )
-
-
-
+    private fun gatter(): Country = Country().apply {
+        _id = null
+        name = findViewById<EditText>(R.id.editText_name1).text.toString().toLowerCase()
+        area = findViewById<EditText>(R.id.editText_country1).text.toString().toLowerCase()
+    }
 
 }
 
