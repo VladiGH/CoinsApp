@@ -6,6 +6,33 @@ import android.os.Parcelable
 
 data class Country (
     var _id: String? = null,
-    val name: String = "N/A",
-    val coins: ArrayList<String> = ArrayList()
-)
+    var name: String = "N/A",
+    var area: String = "N/A"
+):Parcelable{
+    constructor(parcel: Parcel): this (
+        parcel.readString(),
+        parcel.readString()
+    )
+
+    constructor(nothing: Nothing?, toLowerCase: String, toLowerCase1: String) : this()
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(_id)
+        parcel.writeString(name)
+        parcel.writeString(area)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Country> {
+        override fun createFromParcel(parcel: Parcel): Country {
+            return Country(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Country?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
