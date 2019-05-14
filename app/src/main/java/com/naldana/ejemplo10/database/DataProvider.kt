@@ -34,7 +34,7 @@ class DataProvider(appContext: Context) {
     fun syncCountryList(callBack: (ArrayList<Boolean>) -> Unit){
         realtimeData.pullData(Country::class.java) {
             //Todo Raul crear metodo para guaradar paises en local DB
-            callBack(localData.insertToLocalDB(it))
+            //callBack(localData.insertToLocalDB(it))
         }
     }
 
