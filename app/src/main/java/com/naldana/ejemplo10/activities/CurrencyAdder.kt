@@ -31,7 +31,6 @@ class CurrencyAdder : AppCompatActivity() {
             }
         }
     }
-
     private fun gater(): Coin = Coin(
         null,
         findViewById<EditText>(R.id.editText_name).text.toString().toLowerCase(),

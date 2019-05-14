@@ -6,7 +6,8 @@ import android.os.Parcelable
 
 data class Country (
     var _id: String? = null,
-    var name: String = "N/A"
+    var name: String = "N/A",
+    var area: String = "N/A"
 ):Parcelable{
     constructor(parcel: Parcel): this (
         parcel.readString(),
@@ -18,6 +19,7 @@ data class Country (
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(_id)
         parcel.writeString(name)
+        parcel.writeString(area)
     }
 
     override fun describeContents(): Int {
