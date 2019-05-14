@@ -82,7 +82,7 @@ class LocalDB(appContext: Context) {
         return list
     }
 
-    fun insertToLocalDB(country: ArrayList<Country>) {
+    fun insertToLocalDB(country: ArrayList<Country>): ArrayList<Boolean>  {
         val db = dbHelper.writableDatabase
         val listBase = readCountries()
         val dataStatus = java.util.ArrayList<Boolean>()
@@ -92,6 +92,7 @@ class LocalDB(appContext: Context) {
                 put(DatabaseContract.CountryEntry.COLUMN_ID, it._id)
                 put(DatabaseContract.CountryEntry.COLUMN_NAME, it.name)
             }
+
             if (!listBase.contains(it)) {
                 val newRowId = db?.insert(DatabaseContract.CountryEntry.TABLE_NAME, null, values)
                 dataStatus.add(newRowId != -1L)
@@ -101,6 +102,8 @@ class LocalDB(appContext: Context) {
                 // TODO Vlady updateCoin(it) && dataStatus.add(updateCoin->result)
             }
         }
+
+        return dataStatus
 
     }
 
