@@ -33,4 +33,8 @@
     <string name="country_name">Country Name</string>
     <string name="area">Area</string>
     <string name="area2">Area</string>
+    <string name="country5">Country</string>
+    <string name="country_name5">Country Name</string>
+    <string name="area5">area</string>
+    <string name="area51">area</string>
 </resources>

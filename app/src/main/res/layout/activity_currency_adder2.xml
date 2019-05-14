@@ -8,35 +8,35 @@
         tools:context=".activities.CurrencyAdder">
 
     <TextView
-            android:text="@string/Country"
+            android:text="@string/country5"
             android:layout_width="wrap_content"
             android:layout_height="51dp"
-            android:id="@+id/text_name"
+            android:id="@+id/text_name1"
             android:layout_weight="1"/>
 
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="@string/country_name"
+            android:hint="@string/country_name5"
             android:ems="10"
-            android:id="@+id/editText_name"
+            android:id="@+id/editText_name1"
             android:layout_weight="1"/>
 
     <TextView
-            android:text="@string/area"
+            android:text="@string/area5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_country"
+            android:id="@+id/text_country1"
             android:layout_weight="1"/>
 
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="@string/area2"
+            android:hint="@string/area51"
             android:ems="10"
-            android:id="@+id/editText_country"
+            android:id="@+id/editText_country1"
             android:layout_weight="1"/>
 
 
